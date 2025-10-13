@@ -21,12 +21,13 @@
     <p><strong>Дата рождения:</strong> {{ target.birthday or "—" }}</p>
     <p><strong>Номер телефона:</strong> {{ target.phone or "—" }}</p>
     <p><strong>О себе:</strong> {{ target.bio or "—" }}</p>
+    <div style="margin-top: 20px; text-align: center;">
+      <a href="/logout" class="logout-btn" style="display:inline-block;padding:8px 12px;background:#e74c3c;color:#fff;border-radius:6px;text-decoration:none;">Выйти</a>
+    </div>
   </div>
 </div>
 
-<!-- Подъем кнопки "Выход" выше -->
-<div style="margin-top: 20px; text-align: center;">
-  <a href="/logout" class="logout-btn" style="display:inline-block;padding:8px 12px;background:#e74c3c;color:#fff;border-radius:6px;text-decoration:none;">Выйти</a>
-</div>
+
+
 
 {% endblock %}

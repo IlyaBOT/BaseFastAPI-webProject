@@ -14,6 +14,7 @@
         <input type="password" id="password" name="password" required>
 
         <button type="submit" class="button">Войти</button>
+        <button type="button" class="cookie-button" id="testCookieBtn">Test cookie</button>
     </form>
     <p style="margin-top: 15px; font-size: 0.95rem; text-align: center;">
       Нет аккаунта? <a href="/register" style="color: #FF4B2B; text-decoration: none; font-weight: 600;">Зарегистрируйтесь</a>.
@@ -26,4 +27,16 @@
        Войдите, чтобы продолжить общение и делать этот мир чуть уютнее </p>
   </div>
 </div>
+
+<script>
+  document.getElementById('testCookieBtn').addEventListener('click', () => {
+    const cookies = document.cookie.split(';').map(c => c.trim());
+    const token = cookies.find(c => c.startsWith('session_token='));
+    if (token) {
+      alert('Session token: ' + token.split('=')[1]);
+    } else {
+      alert('Кука session_token не найдена (возможно, установлена как HttpOnly)');
+    }
+  });
+</script>
 {% endblock %}

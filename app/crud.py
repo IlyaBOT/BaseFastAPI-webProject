@@ -3,13 +3,10 @@ from .database import engine
 from .models import User
 from passlib.context import CryptContext
 from typing import Optional
-
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 def get_session():
     return Session(engine)
-
-# хелперы
 
 def get_user_by_id(user_id: int) -> Optional[User]:
     with get_session() as s:

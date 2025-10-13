@@ -21,6 +21,7 @@ import pyotp
 import qrcode
 import io
 import base64
+from datetime import timedelta
 
 app = FastAPI()
 app.mount('/static', StaticFiles(directory='app/static'), name='static')
@@ -74,12 +75,10 @@ def register_post(
     resp.set_cookie('session_token', token, httponly=True)
     return resp
 
-
 # Логин (оставляем как было)
 @app.get('/login', response_class=HTMLResponse)
 def login_get(request: Request):
     return templates.TemplateResponse('login.html', {'request': request, 'error': None})
-
 
 @app.post('/login')
 def login_post(request: Request, email: str = Form(...), password: str = Form(...)):
@@ -93,7 +92,13 @@ def login_post(request: Request, email: str = Form(...), password: str = Form(..
         return resp
     resp = RedirectResponse(url=f'/user/{user.id}', status_code=303)
     token = create_session(user.id)
-    resp.set_cookie('session_token', token, httponly=True)
+    resp.set_cookie(
+        key="session_token",
+        value=token,
+        max_age=60*60*24*30,       # 30 дней в секундах
+        httponly=False,
+        samesite="lax"
+    )
     return resp
 
 # 2FA проверка (GET показывает форму, POST проверяет код)

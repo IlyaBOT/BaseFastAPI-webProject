@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width:700px;">
+  <h2>Редактирование профиля</h2>
+  {% if error %}
+    <p class="error">{{ error }}</p>
+  {% endif %}
+  <form class="card" method="post" action="/user/{{ target.id }}/edit">
+    <label for="nickname">Никнейм / Имя</label>
+    <input id="nickname" name="nickname" value="{{ target.nickname }}" type="text" required>
+
+    <label for="email">E-mail</label>
+    <input id="email" name="email" value="{{ target.email }}" type="email" required>
+
+    <label for="password">Новый пароль (оставьте пустым, если не менять)</label>
+    <input id="password" name="password" type="password" placeholder="Новый пароль">
+
+    <label for="password_confirm">Подтверждение пароля</label>
+    <input id="password_confirm" name="password_confirm" type="password" placeholder="Подтвердите пароль">
+
+    <label for="birthday">Дата рождения</label>
+    <input id="birthday" name="birthday" type="date" value="{{ target.birthday or '' }}">
+
+    <label for="phone">Номер телефона</label>
+    <input id="phone" name="phone" type="text" value="{{ target.phone or '' }}">
+
+    <label for="bio">О себе</label>
+    <textarea id="bio" name="bio" rows="4">{{ target.bio or '' }}</textarea>
+
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+      <button class="button secondary" type="button" onclick="window.location='/user/{{ target.id }}'">Отмена</button>
+      <button class="button" type="submit">Сохранить</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

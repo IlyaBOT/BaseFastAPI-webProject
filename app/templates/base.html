@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title if title else "My FastAPI Project" }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo"><a href="/">FastAPI Web-Project</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/login">Вход</a></li>
+                    <li><a href="/register">Регистрация</a></li>
+                    <li><a href="/user/{{ user.id if user else '' }}">Личный кабинет</a></li>
+                    {% if user and user.is_admin %}
+                        <li><a href="/admin">Админка</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; IB-WorkShop. 2025. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

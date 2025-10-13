@@ -1,0 +1,11 @@
+# ignore local DB data, env, venv, IDE files
+mysql_data
+*.pyc
+__pycache__
+.env
+venv
+*.egg-info
+.env.*
+.DS_Store
+node_modules
+*.log

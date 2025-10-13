@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+jinja2
+sqlmodel
+pymysql
+passlib[bcrypt]
+python-multipart
+pyotp
+qrcode
+aiofiles
+python-dotenv
+cryptography
+argon2-cffi
+

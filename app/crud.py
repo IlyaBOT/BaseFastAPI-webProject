@@ -1,0 +1,73 @@
+from sqlmodel import Session, select
+from .database import engine
+from .models import User
+from passlib.context import CryptContext
+from typing import Optional
+
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+
+def get_session():
+    return Session(engine)
+
+# хелперы
+
+def get_user_by_id(user_id: int) -> Optional[User]:
+    with get_session() as s:
+        return s.get(User, user_id)
+
+def get_user_by_email(email: str) -> Optional[User]:
+    with get_session() as s:
+        statement = select(User).where(User.email == email)
+        return s.exec(statement).first()
+
+def list_users() -> list[User]:
+    with get_session() as s:
+        statement = select(User).order_by(User.id)
+        return s.exec(statement).all()
+
+def create_user(nickname: str, email: str, password_plain: str, **kwargs) -> User:
+    with get_session() as s:
+        password_hash = pwd_context.hash(password_plain)
+        user = User(nickname=nickname, email=email, password_hash=password_hash, **kwargs)
+        s.add(user)
+        s.commit()
+        s.refresh(user)
+        return user
+
+# Создание с явным id (для admin на старте)
+def create_user_raw(id: int, nickname: str, email: str, password_plain: str, **kwargs) -> User:
+    with get_session() as s:
+        existing = s.get(User, id)
+        if existing:
+            return existing
+        password_hash = pwd_context.hash(password_plain)
+        user = User(id=id, nickname=nickname, email=email, password_hash=password_hash, **kwargs)
+        s.add(user)
+        s.commit()
+        s.refresh(user)
+        return user
+
+def update_user(user_id: int, **fields) -> Optional[User]:
+    with get_session() as s:
+        user = s.get(User, user_id)
+        if not user:
+            return None
+        for k, v in fields.items():
+            if hasattr(user, k) and v is not None:
+                setattr(user, k, v)
+        s.add(user)
+        s.commit()
+        s.refresh(user)
+        return user
+
+def delete_user(user_id: int) -> bool:
+    with get_session() as s:
+        user = s.get(User, user_id)
+        if not user:
+            return False
+        s.delete(user)
+        s.commit()
+        return True
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)

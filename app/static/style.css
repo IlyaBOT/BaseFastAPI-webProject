@@ -371,10 +371,7 @@ main {
   transition: var(--transition);
 }
 
-.card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-}
+
 
 /* Forms */
 form {
@@ -473,11 +470,233 @@ footer {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.hero, .card { animation: fadeInUp 360ms ease both; }
+
 
 /* Responsive */
 @media (max-width: 900px) {
   header .container { flex-direction: column; align-items: flex-start; gap: 8px; }
   nav ul { flex-wrap: wrap; gap: 8px; }
   .hero { padding: 24px; }
+}
+.register-container {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 900px;
+  margin: 40px auto;
+}
+
+.form-section {
+  flex: 1;
+  background: #fff;
+  padding: 40px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-section h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+form.card {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: none;
+}
+
+form.card .button {
+  display: inline-block;
+  text-align: center;
+  justify-content: center; 
+  width: auto; 
+  min-width: 180px; 
+  padding: 12px 20px;
+  margin-top: 15px;
+}
+
+
+form.card label {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+
+form.card input {
+  margin-top: 5px;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #eee;
+  font-size: 14px;
+}
+
+
+
+.button {
+  margin-top: 20px;
+  border-radius: 20px;
+  border: 1px solid #FF4B2B;
+  background-color: #FF4B2B;
+  color: #fff;
+  padding: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 80ms ease-in, background 0.2s;
+}
+
+.button:hover {
+  background-color: #ff5b3c;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.error {
+  color: #c62828;
+  background: #ffebee;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.info-section {
+  flex: 1;
+  background: linear-gradient(135deg, #FF4B2B, #FF416C);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+}
+
+.info-section h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.info-section p {
+  max-width: 320px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.info-section img {
+  width: 220px;
+  border-radius: 12px;
+  margin-top: 25px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 800px) {
+  .register-container {
+    flex-direction: column;
+    width: 92%;
+  }
+  .info-section {
+    order: -1;
+    padding: 30px;
+  }
+}.user-card {
+  display: flex;
+  flex-wrap: wrap;
+  background: linear-gradient(145deg, rgba(255,255,255,0.75), rgba(245,245,247,0.85));
+  backdrop-filter: var(--glass);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px;
+  max-width: 900px;
+  width: 90%;
+  margin: 40px auto;
+  transition: var(--transition);
+  animation: fadeInUp 400ms ease both;
+  gap: 32px;
+}
+
+.user-card-left {
+  flex: 0 0 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-card-left img {
+  width: 180px;       
+  height: 220px;      
+  border-radius: 16px; 
+  object-fit: cover;
+  border: 4px solid rgba(255,255,255,0.6);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  transition: var(--transition);
+}
+
+.user-card-left img:hover {
+  transform: scale(1.03);
+}
+
+
+.user-card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.user-card-right h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 20px;
+}
+
+.user-card-right p {
+  font-size: 1.05rem;
+  color: var(--muted);
+  margin: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.4);
+  transition: var(--transition);
+}
+
+.user-card-right p:hover {
+  background: rgba(0, 122, 255, 0.08);
+}
+
+.user-card-right p strong {
+  color: var(--fg);
+}
+
+@media (max-width: 700px) {
+  .user-card {
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px;
+  }
+
+  .user-card-left {
+    flex: unset;
+    margin-bottom: 24px;
+  }
+
+  .user-card-right p {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

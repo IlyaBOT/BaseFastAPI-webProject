@@ -2,15 +2,20 @@
 {% block content %}
 <h2>Личный кабинет</h2>
 <div class="user-card">
+  <div class="user-card-left">
+    <img src="{{ user.avatar_url or '/static/default-avatar.png' }}" alt="Фото профиля">
+  </div>
+  <div class="user-card-right">
+    <h2>{{ user.username }}</h2>
     <p><strong>ID:</strong> {{ user.id }}</p>
-    <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
     <p><strong>E-mail:</strong> {{ user.email }}</p>
     <p><strong>Дата рождения:</strong> {{ user.birth_date or "—" }}</p>
     <p><strong>Номер телефона:</strong> {{ user.phone or "—" }}</p>
     <p><strong>О себе:</strong> {{ user.bio or "—" }}</p>
+  </div>
 </div>
 
-<h3>Изменить данные</h3>
+<!-- <h3>Изменить данные</h3>
 <form method="post" action="/user/{{ user.id }}/update">
     <label for="username">Никнейм:</label>
     <input type="text" id="username" name="username" value="{{ user.username }}">
@@ -35,6 +40,6 @@
         Включить двухфакторную аутентификацию
     </label>
 
-    <button type="submit">Сохранить изменения</button>
+    <button type="submit">Сохранить изменения</button> -->
 </form>
 {% endblock %}

@@ -4,14 +4,14 @@
 <h2>Личный кабинет</h2>
 
 <div class="user-card">
-  <div class="user-card-left">
+ <div class="user-card-left">
+  <div class="avatar-wrapper">
     <img src="{{ target.avatar_url or request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Фото профиля">
     {% if editable %}
-      <div style="margin-top:16px;">
-        <a href="/user/{{ user.id }}/edit" class="edit-btn" style="display:inline-block;padding:8px 12px;background:#2ecc71;color:#fff;border-radius:6px;text-decoration:none;">Редактировать профиль</a>
-      </div>
+      <a href="/user/{{ user.id }}/edit" class="edit-profile-btn">Редактировать профиль</a>
     {% endif %}
   </div>
+</div>
 
   <div class="user-card-right">
     <h2>{{ target.nickname }}</h2>

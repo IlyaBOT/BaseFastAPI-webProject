@@ -14,6 +14,7 @@
 </div>
 
   <div class="user-card-right">
+<<<<<<< HEAD
     <h2>{{ user.nickname }}</h2>
     <!-- <p><strong>Логин:</strong> {{ user.nickname }}</p> -->
     <p><strong>User ID:</strong> {{ user.id }}</p>
@@ -21,6 +22,15 @@
     <p><strong>Дата рождения:</strong> {{ user.birthday or "—" }}</p>
     <p><strong>Номер телефона:</strong> {{ user.phone or "—" }}</p>
     <p><strong>О себе:</strong> {{ user.bio or "—" }}</p>
+=======
+    <h2 class="welcome-text">Добро пожаловать, {{ target.nickname }}!</h2>
+    <!-- <p><strong>Логин:</strong> {{ target.nickname }}</p> -->
+    <p><strong>User ID:</strong> {{ target.id }}</p>
+    <p><strong>E-mail:</strong> {{ target.email or "—" }}</p>
+    <p><strong>Дата рождения:</strong> {{ target.birthday or "—" }}</p>
+    <p><strong>Номер телефона:</strong> {{ target.phone or "—" }}</p>
+    <p><strong>О себе:</strong> {{ target.bio or "—" }}</p>
+>>>>>>> 388fff1e059f703c3356573238e71b816de1c73f
     <div style="margin-top: 20px; text-align: center;">
       <a href="/logout" class="logout-btn" style="display:inline-block;padding:8px 12px;background:#e74c3c;color:#fff;border-radius:6px;text-decoration:none;">Выйти</a>
     </div>

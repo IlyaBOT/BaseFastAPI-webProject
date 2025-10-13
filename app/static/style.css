@@ -428,6 +428,12 @@ form.card input {
   margin-bottom: 20px;
 }
 
+.welcome-text {
+  text-align: center;           
+  width: 100%;                  
+  margin-bottom: 24px;          
+}
+
 .user-card-right p {
   font-size: 1.05rem;
   color: var(--muted);

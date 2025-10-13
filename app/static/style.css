@@ -258,7 +258,7 @@ html, body {
   line-height: 1.5;
 }
 
-/* Container */
+
 .container {
   width: 100%;
   max-width: 1100px;
@@ -266,7 +266,7 @@ html, body {
   padding: 0 24px;
 }
 
-/* Header */
+
 header {
   position: sticky;
   top: 0;
@@ -298,7 +298,7 @@ header .container {
   color: var(--accent);
 }
 
-/* Nav */
+
 nav ul {
   list-style: none;
   margin: 0;
@@ -322,7 +322,7 @@ nav a:hover {
   background: rgba(0, 122, 255, 0.08);
 }
 
-/* Hero */
+
 main {
   display: flex;
   flex-direction: column;
@@ -361,7 +361,7 @@ main {
   font-size: 1.05rem;
 }
 
-/* Card */
+
 .card {
   background: var(--card);
   backdrop-filter: var(--glass);
@@ -373,7 +373,6 @@ main {
 
 
 
-/* Forms */
 form {
   display: flex;
   flex-direction: column;
@@ -408,7 +407,7 @@ input:focus, textarea:focus, select:focus {
   background: #fff;
 }
 
-/* Buttons */
+
 .button, button {
   appearance: none;
   border: none;
@@ -441,7 +440,7 @@ input:focus, textarea:focus, select:focus {
   background: rgba(0, 122, 255, 0.08);
 }
 
-/* Tables */
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -455,7 +454,7 @@ input:focus, textarea:focus, select:focus {
   text-align: left;
 }
 
-/* Footer */
+
 footer {
   padding: 18px 0;
   color: #9a9a9f;
@@ -465,14 +464,14 @@ footer {
   backdrop-filter: var(--glass);
 }
 
-/* Animations */
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 
-/* Responsive */
+
 @media (max-width: 900px) {
   header .container { flex-direction: column; align-items: flex-start; gap: 8px; }
   nav ul { flex-wrap: wrap; gap: 8px; }

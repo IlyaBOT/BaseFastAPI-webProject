@@ -25,6 +25,7 @@ import base64
 from datetime import timedelta
 
 app = FastAPI()
+app.mount('/resources', StaticFiles(directory='app/resources'), name='resources')
 app.mount('/static', StaticFiles(directory='app/static'), name='static')
 templates = Jinja2Templates(directory='app/templates')
 

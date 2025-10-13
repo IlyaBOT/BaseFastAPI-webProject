@@ -10,7 +10,7 @@
     <p><strong>О себе:</strong> {{ user.bio or "—" }}</p>
 </div>
 
-<h3>Изменить данные</h3>
+<!-- <h3>Изменить данные</h3>
 <form method="post" action="/user/{{ user.id }}/update">
     <label for="username">Никнейм:</label>
     <input type="text" id="username" name="username" value="{{ user.username }}">
@@ -35,6 +35,6 @@
         Включить двухфакторную аутентификацию
     </label>
 
-    <button type="submit">Сохранить изменения</button>
+    <button type="submit">Сохранить изменения</button> -->
 </form>
 {% endblock %}

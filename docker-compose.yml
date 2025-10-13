@@ -11,6 +11,11 @@ services:
       DB_PORT: 3306
     volumes:
       - ./mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   web:
     build: .
@@ -19,7 +24,8 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - MYSQL_USER=fastapi_user
       - MYSQL_PASSWORD=fastapi_pass

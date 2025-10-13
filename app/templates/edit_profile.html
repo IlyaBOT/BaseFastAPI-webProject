@@ -2,35 +2,96 @@
 {% block content %}
 <div class="container" style="max-width:700px;">
   <h2>Редактирование профиля</h2>
-  {% if error %}
-    <p class="error">{{ error }}</p>
-  {% endif %}
-  <form class="card" method="post" action="/user/{{ target.id }}/edit">
-    <label for="nickname">Никнейм / Имя</label>
-    <input id="nickname" name="nickname" value="{{ target.nickname }}" type="text" required>
 
-    <label for="email">E-mail</label>
-    <input id="email" name="email" value="{{ target.email }}" type="email" required>
-
-    <label for="password">Новый пароль (оставьте пустым, если не менять)</label>
-    <input id="password" name="password" type="password" placeholder="Новый пароль">
-
-    <label for="password_confirm">Подтверждение пароля</label>
-    <input id="password_confirm" name="password_confirm" type="password" placeholder="Подтвердите пароль">
-
-    <label for="birthday">Дата рождения</label>
-    <input id="birthday" name="birthday" type="date" value="{{ target.birthday or '' }}">
-
-    <label for="phone">Номер телефона</label>
-    <input id="phone" name="phone" type="text" value="{{ target.phone or '' }}">
-
-    <label for="bio">О себе</label>
-    <textarea id="bio" name="bio" rows="4">{{ target.bio or '' }}</textarea>
-
-    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
-      <button class="button secondary" type="button" onclick="window.location='/user/{{ target.id }}'">Отмена</button>
-      <button class="button" type="submit">Сохранить</button>
+  {% if not editable %}
+    <p class="error" style="color:#c0392b;">У вас нет прав для редактирования этого профиля.</p>
+    <div style="margin-top:12px;">
+      <a href="/user/{{ user.id }}" class="button secondary">Вернуться в профиль</a>
     </div>
-  </form>
+  {% else %}
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form class="card" method="post" action="/user/{{ user.id }}/edit" enctype="multipart/form-data">
+      <div style="flex:0 0 180px;text-align:center;">
+        <!-- превью аватарки -->
+        {% if user.avatar %}
+          <img id="avatarPreview" src="data:image/png;base64,{{ user.avatar }}" alt="Avatar" style="width:160px;height:160px;border-radius:8px;object-fit:cover;border:1px solid #ddd;">
+        {% else %}
+          <img id="avatarPreview" src="{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Avatar" style="width:160px;height:160px;border-radius:8px;object-fit:cover;border:1px solid #ddd;background:#fff;padding:8px;">
+        {% endif %}
+
+        <div style="margin-top:10px;">
+          <label for="avatarFile" class="button">Загрузить</label>
+          <input id="avatarFile" type="file" accept="image/*" style="display:none;">
+        </div>
+
+        <div style="margin-top:8px;">
+          <button id="removeAvatarBtn" type="button">Удалить</button>
+        </div>
+      </div>
+      
+      <label for="nickname">Никнейм / Имя</label>
+      <input id="nickname" name="nickname" value="{{ user.nickname }}" type="text" required>
+
+      <label for="email">E-mail</label>
+      <input id="email" name="email" value="{{ user.email }}" type="email" required>
+
+      <label for="password">Новый пароль (оставьте пустым, если не менять)</label>
+      <input id="password" name="password" type="password" placeholder="Новый пароль">
+
+      <label for="password_confirm">Подтверждение пароля</label>
+      <input id="password_confirm" name="password_confirm" type="password" placeholder="Подтвердите пароль">
+
+      <label for="birthday">Дата рождения</label>
+      <input id="birthday" name="birthday" type="date" value="{{ user.birthday or '' }}">
+
+      <label for="phone">Номер телефона</label>
+      <input id="phone" name="phone" type="text" value="{{ user.phone or '' }}">
+
+      <label for="bio">О себе</label>
+      <textarea id="bio" name="bio" rows="4">{{ user.bio or '' }}</textarea>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+        <button class="button secondary" type="button" onclick="window.location='/user/{{ user.id }}'">Отмена</button>
+        <button class="button" type="submit">Сохранить</button>
+      </div>
+    </form>
+  {% endif %}
 </div>
+
+<script>
+  // Конвертация файла в base64 (убираем префикс data:image/...;base64,)
+  const avatarFile = document.getElementById('avatarFile');
+  const avatarB64Input = document.getElementById('avatar_b64');
+  const preview = document.getElementById('avatarPreview');
+  const removeBtn = document.getElementById('removeAvatarBtn');
+
+  avatarFile.addEventListener('change', () => {
+    const f = avatarFile.files[0];
+    if (!f) return;
+    if (!f.type.startsWith('image/')) {
+      alert('Пожалуйста, выберите изображение.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result; // data:image/png;base64,.....
+      preview.src = result;
+      // сохраняем только base64 часть без префикса
+      const comma = result.indexOf(',');
+      avatarB64Input.value = comma >= 0 ? result.slice(comma + 1) : result;
+    };
+    reader.readAsDataURL(f);
+  });
+
+  // удаление аватарки: очистим поле и поставим превью на дефолт (если есть)
+  removeBtn.addEventListener('click', () => {
+    avatarB64Input.value = '__DELETE__'; // спец-маркер, чтобы сервер удалил аватар
+    // поставим превью в дефолтный static
+    preview.src = "{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}";
+  });
+</script>
+
 {% endblock %}

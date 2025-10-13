@@ -133,18 +133,25 @@ def twofa_post(request: Request, code: str = Form(...)):
 # Профиль
 @app.get('/user/{user_id}', response_class=HTMLResponse)
 def profile(request: Request, user_id: int, current_user=Depends(get_current_user)):
-    target = get_user_by_id(user_id)
-    if not target:
+    user = get_user_by_id(user_id)
+    if not user:
         return Response('Пользователь не найден', status_code=404)
-    editable = current_user and (current_user.id == target.id or current_user.id == 1)
-    return templates.TemplateResponse('profile.html', {'request': request, 'user': current_user, 'target': target, 'editable': editable})
+    editable = current_user and (current_user.id == user.id or current_user.id == 1)
+    return templates.TemplateResponse('profile.html', {'request': request, 'user': current_user, 'user': user, 'editable': editable})
 
 @app.get('/user/{user_id}/edit', response_class=HTMLResponse)
 def edit_profile_get(request: Request, user_id: int, current_user=Depends(get_current_user)):
-    if not current_user or not (current_user.id == user_id or current_user.id == 1):
-        return RedirectResponse('/login')
-    target = get_user_by_id(user_id)
-    return templates.TemplateResponse('edit_profile.html', {'request': request, 'target': target, 'error': None})
+    user = get_user_by_id(user_id)
+    if not user:
+        return Response('Пользователь не найден', status_code=404)
+
+    editable = bool(current_user and (current_user.id == user_id or current_user.id == 1))
+    return templates.TemplateResponse('edit_profile.html', {
+        'request': request,
+        'user': user,
+        'error': None,
+        'editable': editable
+    })
 
 @app.post('/user/{user_id}/edit')
 def edit_profile_post(
@@ -157,13 +164,19 @@ def edit_profile_post(
     birthday: Optional[str] = Form(None),
     bio: Optional[str] = Form(None),
     phone: Optional[str] = Form(None),
+    avatar_b64: Optional[str] = Form(None),
     current_user=Depends(get_current_user),
 ):
+    # САМАЯ ВАЖНАЯ ЧАСТЬ: жёсткая проверка прав
     if not current_user or not (current_user.id == user_id or current_user.id == 1):
+        # можно возвращать 403 либо редирект на логин/профиль
         return RedirectResponse('/login')
+
+    # далее — твоя логика валидации/обновления (как было)
     if password and password != password_confirm:
-        target = get_user_by_id(user_id)
-        return templates.TemplateResponse('edit_profile.html', {'request': request, 'target': target, 'error': 'Пароли не совпадают'})
+        user = get_user_by_id(user_id)
+        return templates.TemplateResponse('edit_profile.html', {'request': request, 'user': user, 'error': 'Пароли не совпадают', 'editable': True})
+
     fields = {}
     if nickname is not None:
         fields['nickname'] = nickname
@@ -176,8 +189,19 @@ def edit_profile_post(
     if phone is not None:
         fields['phone'] = phone
     if password:
-        # хешируем пароль и передаём как password_hash (update_user просто ставит поле)
         fields['password_hash'] = pwd_context.hash(password)
+
+    # avatar_b64 handling as you already had (delete marker or store)
+    if avatar_b64:
+        if avatar_b64 == '__DELETE__':
+            fields['avatar'] = None
+        else:
+            MAX_B64 = 1_000_000
+            if len(avatar_b64) > MAX_B64:
+                user = get_user_by_id(user_id)
+                return templates.TemplateResponse('edit_profile.html', {'request': request, 'user': user, 'error': 'Файл слишком большой', 'editable': True})
+            fields['avatar'] = avatar_b64
+
     update_user(user_id, **fields)
     return RedirectResponse(f'/user/{user_id}', status_code=303)
 

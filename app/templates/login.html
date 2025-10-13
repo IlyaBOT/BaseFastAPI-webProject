@@ -1,14 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Вход</h2>
-<form method="post" action="/login">
-    <label for="email">E-mail:</label>
-    <input type="text" id="email" name="email" required>
+<div class="register-container">
+  <div class="form-section">
+    <h1>Вход</h1>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="post" action="/login" class="card">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
 
-    <label for="password">Пароль:</label>
-    <input type="password" id="password" name="password" required>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
 
-    <button type="submit">Войти</button>
-</form>
-<p>Нет аккаунта? <a href="/register">Зарегистрируйтесь</a>.</p>
+        <button type="submit" class="button">Войти</button>
+    </form>
+    <p style="margin-top: 15px; font-size: 0.95rem; text-align: center;">
+      Нет аккаунта? <a href="/register" style="color: #FF4B2B; text-decoration: none; font-weight: 600;">Зарегистрируйтесь</a>.
+    </p>
+  </div>
+
+  <div class="info-section">
+    <h2>С возвращением 😸</h2>
+    <p>Рады видеть вас снова!  
+       Войдите, чтобы продолжить общение и делать этот мир чуть уютнее </p>
+  </div>
+</div>
 {% endblock %}

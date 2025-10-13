@@ -1,24 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Регистрация</h2>
-{% if error %}
-  <p class="error">{{ error }}</p>
-{% endif %}
-<form method="post" action="/register" class="card">
-    <label for="username">Имя пользователя:</label>
-    <input type="text" id="username" name="username" required>
+<div class="register-container">
+  <div class="form-section">
+    <h1>Регистрация</h1>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="post" action="/register" class="card">
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" required>
 
-    <label for="email">E-mail:</label>
-    <input type="email" id="email" name="email" required>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
 
-    <label for="password">Пароль:</label>
-    <input type="password" id="password" name="password" required>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
 
-    <label for="confirm_password">Подтверждение пароля:</label>
-    <input type="password" id="confirm_password" name="confirm_password" required>
+        <label for="confirm_password">Подтверждение пароля:</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
 
-    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:6px;">
-      <button type="submit" class="button">Зарегистрироваться</button>
-    </div>
-</form>
+        <button type="submit" class="button">Зарегистрироваться</button>
+    </form>
+  </div>
+
+  <div class="info-section">
+    <h2>Добро пожаловать 😺</h2>
+    <p>Создайте аккаунт, чтобы присоединиться к нашему сообществу и начать делать мир чуть лучше!</p>
+  </div>
+</div>
 {% endblock %}

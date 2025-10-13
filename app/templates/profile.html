@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+
 <h2>Личный кабинет</h2>
+
 <div class="user-card">
   <div class="user-card-left">
     <img src="{{ user.avatar_url or '/resources/img/base_avatar.svg' }}" alt="Фото профиля">
@@ -11,35 +13,23 @@
     <p><strong>E-mail:</strong> {{ user.email }}</p>
     <p><strong>Дата рождения:</strong> {{ user.birth_date or "—" }}</p>
     <p><strong>Номер телефона:</strong> {{ user.phone or "—" }}</p>
-    <p><strong>О себе:</strong> {{ user.bio or "—" }}</p>
-  </div>
-</div>
+    <p><strong>О себе:</strong> {{ user.bio or "—" }}</p> 
 
-<!-- <h3>Изменить данные</h3>
+  
+  </div>
+</div> 
+<!-- Подьем кнопки "Выход" выше -->
+<div style="margin-top: 20px; text-align: center;">
+  <a href="/logout" class="logout-btn">Выйти</a>
+</div>
+<!--
+<h3>Изменить данные</h3>
 <form method="post" action="/user/{{ user.id }}/update">
     <label for="username">Никнейм:</label>
     <input type="text" id="username" name="username" value="{{ user.username }}">
-
-    <label for="email">E-mail:</label>
-    <input type="text" id="email" name="email" value="{{ user.email }}">
-
-    <label for="password">Новый пароль:</label>
-    <input type="password" id="password" name="password">
-
-    <label for="birth_date">Дата рождения:</label>
-    <input type="date" id="birth_date" name="birth_date" value="{{ user.birth_date }}">
-
-    <label for="phone">Телефон:</label>
-    <input type="text" id="phone" name="phone" value="{{ user.phone }}">
-
-    <label for="bio">О себе:</label>
-    <textarea id="bio" name="bio">{{ user.bio }}</textarea>
-
-    <label>
-        <input type="checkbox" name="enable_2fa" {% if user.otp_secret %}checked{% endif %}>
-        Включить двухфакторную аутентификацию
-    </label>
-
-    <button type="submit">Сохранить изменения</button> -->
+    ...
+    <button type="submit">Сохранить изменения</button>
 </form>
+-->
+
 {% endblock %}

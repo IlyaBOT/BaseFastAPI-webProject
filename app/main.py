@@ -253,11 +253,13 @@ def admin_delete(user_id: int = Form(...), current_user=Depends(get_current_user
 
 
 # Logout
-@app.get('/logout')
-def logout(request: Request):
-    session_token = request.cookies.get('session_token')
-    # удалим сессию сервер-сайд
-    destroy_session(session_token)
-    resp = RedirectResponse('/')
-    resp.delete_cookie('session_token')
-    return resp
+@app.get("/logout")
+async def logout(request: Request):
+    token = request.cookies.get("session_token")
+
+    if token:
+        destroy_session(token)
+
+    response = RedirectResponse(url="/login", status_code=302)
+    response.delete_cookie("session_token")
+    return response

@@ -699,3 +699,18 @@ form.card input {
     align-items: flex-start;
   }
 }
+.logout-btn {
+  display: inline-block;        /* чтобы можно было задавать отступы и паддинг */
+  margin-top: 15px;             /* отступ сверху от контента */
+  padding: 10px 20px;           /* внутренние отступы */
+  background-color: #e74c3c;    /* красный фон */
+  color: white;                 /* цвет текста */
+  text-decoration: none;        /* убрать подчеркивание */
+  border-radius: 8px;           /* скругление углов */
+  font-weight: 600;             /* жирный текст */
+  transition: background-color 0.3s; /* плавное изменение цвета при наведении */
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;    /* темнее при наведении */
+}

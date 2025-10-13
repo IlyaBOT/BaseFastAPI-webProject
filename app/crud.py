@@ -16,6 +16,11 @@ def get_user_by_email(email: str) -> Optional[User]:
     with get_session() as s:
         statement = select(User).where(User.email == email)
         return s.exec(statement).first()
+    
+def get_user_by_login(login: str) -> Optional[User]:
+    with get_session() as s:
+        statement = select(User).where(User.nickname == login)
+        return s.exec(statement).first()
 
 def list_users() -> list[User]:
     with get_session() as s:

@@ -9,13 +9,12 @@
   </div>
   <div class="user-card-right">
     <h2>{{ user.username }}</h2>
-    <p><strong>ID:</strong> {{ user.id }}</p>
+    <p><strong>Логин:</strong> {{ user.nickname }}</p>
+    <p><strong>User ID:</strong> {{ user.id }}</p>
     <p><strong>E-mail:</strong> {{ user.email }}</p>
     <p><strong>Дата рождения:</strong> {{ user.birth_date or "—" }}</p>
     <p><strong>Номер телефона:</strong> {{ user.phone or "—" }}</p>
     <p><strong>О себе:</strong> {{ user.bio or "—" }}</p> 
-
-  
   </div>
 </div> 
 <!-- Подьем кнопки "Выход" выше -->

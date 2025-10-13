@@ -8,6 +8,7 @@ from .database import engine
 from .crud import (
     create_user,
     get_user_by_email,
+    get_user_by_login,
     verify_password,
     list_users,
     get_user_by_id,
@@ -81,8 +82,8 @@ def login_get(request: Request):
     return templates.TemplateResponse('login.html', {'request': request, 'error': None})
 
 @app.post('/login')
-def login_post(request: Request, email: str = Form(...), password: str = Form(...)):
-    user = get_user_by_email(email)
+def login_post(request: Request, login: str = Form(...), password: str = Form(...)):
+    user = get_user_by_login(login)
     if not user or not verify_password(password, user.password_hash):
         return templates.TemplateResponse('login.html', {'request': request, 'error': 'Неправильные учётные данные'})
     # Если включена 2FA — перенаправляем на страницу ввода кода
@@ -92,11 +93,12 @@ def login_post(request: Request, email: str = Form(...), password: str = Form(..
         return resp
     resp = RedirectResponse(url=f'/user/{user.id}', status_code=303)
     token = create_session(user.id)
+    # кука на 30 дней, HttpOnly для безопасности
     resp.set_cookie(
         key="session_token",
         value=token,
         max_age=60*60*24*30,       # 30 дней в секундах
-        httponly=False,
+        httponly=True,
         samesite="lax"
     )
     return resp
@@ -107,7 +109,6 @@ def twofa_get(request: Request, user_id: Optional[int] = None):
     # Универсальная страница: если user_id указан — это этап настройки (редиректят на /user/.../2fa),
     # если нет — это проверка при логине (checking=True)
     return templates.TemplateResponse('2fa_setup.html', {'request': request, 'checking': True, 'error': None})
-
 
 @app.post('/2fa_check')
 def twofa_post(request: Request, code: str = Form(...)):
@@ -128,7 +129,6 @@ def twofa_post(request: Request, code: str = Form(...)):
     resp.delete_cookie('tmp_user')
     return resp
 
-
 # Профиль
 @app.get('/user/{user_id}', response_class=HTMLResponse)
 def profile(request: Request, user_id: int, current_user=Depends(get_current_user)):
@@ -138,14 +138,12 @@ def profile(request: Request, user_id: int, current_user=Depends(get_current_use
     editable = current_user and (current_user.id == target.id or current_user.id == 1)
     return templates.TemplateResponse('profile.html', {'request': request, 'user': current_user, 'target': target, 'editable': editable})
 
-
 @app.get('/user/{user_id}/edit', response_class=HTMLResponse)
 def edit_profile_get(request: Request, user_id: int, current_user=Depends(get_current_user)):
     if not current_user or not (current_user.id == user_id or current_user.id == 1):
         return RedirectResponse('/login')
     target = get_user_by_id(user_id)
     return templates.TemplateResponse('edit_profile.html', {'request': request, 'target': target, 'error': None})
-
 
 @app.post('/user/{user_id}/edit')
 def edit_profile_post(
@@ -182,7 +180,6 @@ def edit_profile_post(
     update_user(user_id, **fields)
     return RedirectResponse(f'/user/{user_id}', status_code=303)
 
-
 # 2FA setup (enable/disable)
 @app.get('/user/{user_id}/2fa', response_class=HTMLResponse)
 def setup_2fa_get(request: Request, user_id: int, current_user=Depends(get_current_user)):
@@ -203,14 +200,12 @@ def setup_2fa_get(request: Request, user_id: int, current_user=Depends(get_curre
     img_b64 = base64.b64encode(buf.getvalue()).decode()
     return templates.TemplateResponse('2fa_setup.html', {'request': request, 'user': current_user, 'qr': img_b64, 'secret': user.otp_secret, 'checking': False})
 
-
 @app.post('/user/{user_id}/2fa_disable')
 def disable_2fa(user_id: int, current_user=Depends(get_current_user)):
     if not current_user or not (current_user.id == user_id or current_user.id == 1):
         return RedirectResponse('/login')
     update_user(user_id, is_2fa_enabled=False, otp_secret=None)
     return RedirectResponse(f'/user/{user_id}')
-
 
 @app.post('/user/{user_id}/2fa_enable')
 def enable_2fa(user_id: int, code: str = Form(...), current_user=Depends(get_current_user)):
@@ -223,7 +218,6 @@ def enable_2fa(user_id: int, code: str = Form(...), current_user=Depends(get_cur
     if totp.verify(code):
         update_user(user_id, is_2fa_enabled=True)
     return RedirectResponse(f'/user/{user_id}')
-
 
 # Админ: список пользователей, создание, удаление
 @app.get('/admin', response_class=HTMLResponse)
@@ -246,7 +240,6 @@ def admin_create(
     create_user(nickname=nickname, email=email, password_plain=password)
     return RedirectResponse('/admin')
 
-
 @app.post('/admin/delete')
 def admin_delete(user_id: int = Form(...), current_user=Depends(get_current_user)):
     if not current_user or current_user.id != 1:
@@ -256,15 +249,12 @@ def admin_delete(user_id: int = Form(...), current_user=Depends(get_current_user
     delete_user(user_id)
     return RedirectResponse('/admin')
 
-
 # Logout
 @app.get("/logout")
 async def logout(request: Request):
     token = request.cookies.get("session_token")
-
     if token:
         destroy_session(token)
-
-    response = RedirectResponse(url="/login", status_code=302)
+    response = RedirectResponse(url="/", status_code=302)
     response.delete_cookie("session_token")
     return response

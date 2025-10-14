@@ -3,31 +3,45 @@
 
 <h2>Личный кабинет</h2>
 
-<div class="user-card">
- <div class="user-card-left">
-  <div class="avatar-wrapper">
-    <img src="{{ target.avatar_url or request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Фото профиля">
-    {% if editable %}
-      <a href="/user/{{ user.id }}/edit" class="edit-profile-btn">Редактировать профиль</a>
-    {% endif %}
-  </div>
-</div>
+<div class="profile-container">
+  <h1 class="profile-welcome">Добро пожаловать, {{ target.nickname }}!</h1>
 
-  <div class="user-card-right">
-    <h2 class="welcome-text">Добро пожаловать, {{ target.nickname }}!</h2>
-    <!-- <p><strong>Логин:</strong> {{ target.nickname }}</p> -->
-    <p><strong>User ID:</strong> {{ target.id }}</p>
-    <p><strong>E-mail:</strong> {{ target.email or "—" }}</p>
-    <p><strong>Дата рождения:</strong> {{ target.birthday or "—" }}</p>
-    <p><strong>Номер телефона:</strong> {{ target.phone or "—" }}</p>
-    <p><strong>О себе:</strong> {{ target.bio or "—" }}</p>
-    <div style="margin-top: 20px; text-align: center;">
-      <a href="/logout" class="logout-btn" style="display:inline-block;padding:8px 12px;background:#e74c3c;color:#fff;border-radius:6px;text-decoration:none;">Выйти</a>
+  <div class="profile-layout">
+
+    <!-- Левая часть -->
+    <div class="profile-left">
+      <div class="profile-avatar">
+        <img src="{{ target.avatar_url or request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Фото профиля">
+      </div>
+      {% if editable %}
+      <a href="/user/{{ target.id }}/edit" class="profile-btn green">Редактировать профиль</a>
+      {% endif %}
+      <a href="/logout" class="profile-btn red">Выйти из аккаунта</a>
+    </div>
+
+    <!-- Правая часть -->
+    <div class="profile-right">
+      <div class="profile-box">
+        <p class="label-bold">User ID:</p>
+        <p class="label-normal">{{ target.id }}</p>
+
+        <p class="label-bold">Email:</p>
+        <p class="label-normal">{{ target.email or "—" }}</p>
+
+        <p class="label-bold">Дата Рождения:</p>
+        <p class="label-normal">{{ target.birthday or "—" }}</p>
+
+        <p class="label-bold">Номер телефона:</p>
+        <p class="label-normal">{{ target.phone or "—" }}</p>
+      </div>
+
+      <div class="profile-bio">
+        <p class="label-bold">О себе:</p>
+        <p class="bio-text">{{ target.bio or "—" }}</p>
+      </div>
     </div>
   </div>
 </div>
-
-
 
 
 {% endblock %}

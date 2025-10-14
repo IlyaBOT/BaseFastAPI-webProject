@@ -3,7 +3,6 @@
 
 <h2>Личный кабинет</h2>
 
-<<<<<<< HEAD
 <div class="profile-container">
   <h1 class="profile-welcome">Добро пожаловать, {{ target.nickname }}!</h1>
 
@@ -40,31 +39,6 @@
         <p class="label-bold">О себе:</p>
         <p class="bio-text">{{ target.bio or "—" }}</p>
       </div>
-=======
-<div class="user-card">
- <div class="user-card-left">
-  <div class="avatar-wrapper">
-    <img src="{{ user.avatar_url or request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Фото профиля">
-    {% if editable %}
-      <a href="/user/{{ user.id }}/edit" class="edit-profile-btn">Редактировать профиль</a>
-    {% endif %}
-  </div>
-</div>
-
-  <div class="user-card-right">
-    <h2 class="welcome-text">Добро пожаловать, {{ user.nickname }}!</h2>
-    <!-- <p><strong>Логин:</strong> {{ user.nickname }}</p> -->
-    <p><strong>User ID:</strong> {{ user.id }}</p>
-    <p><strong>E-mail:</strong> {{ user.email or "—" }}</p>
-    <p><strong>Дата рождения:</strong> {{ user.birthday or "—" }}</p>
-    <p><strong>Номер телефона:</strong> {{ user.phone or "—" }}</p>
-    <p><strong>О себе:</strong> {{ user.bio or "—" }}</p>
-    <div style="margin-top: 20px; text-align: center;">
-      <a href="/logout" class="logout-btn" style="display:inline-block;padding:8px 12px;background:#e74c3c;color:#fff;border-radius:6px;text-decoration:none;">Выйти</a>
->>>>>>> fadeedda69a747b4f629aa538a720c07a0b38eee
-    </div>
-  </div>
-</div>
 
 
 {% endblock %}

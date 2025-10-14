@@ -586,13 +586,16 @@ form.card input {
 }
 
 .profile-container {
-  max-width: 1100px; 
-  margin: 60px auto;
-  padding: 30px 20px;
-  text-align: center;
-  font-family: Arial, sans-serif;
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 00px 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border: 1.5px solid #bfbfbf;
+    border-radius: 10px;
 }
-
 
 .profile-welcome {
   font-size: 32px;
@@ -604,16 +607,15 @@ form.card input {
 }
 
 .profile-layout {
-  display: flex;
-  border: 1.5px solid #bfbfbf;
-  border-radius: 10px;
-  background-color: #fff;
-  padding: 30px; 
-  gap: 30px; 
-  justify-content: space-between;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    display: flex;
+    /* border: 1.5px solid #bfbfbf; */
+    border-radius: 10px;
+    /* background-color: #fff; */
+    padding: 0px 16px 16px 16px;
+    gap: 30px;
+    justify-content: space-between;
+    /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); */
 }
-
 
 .profile-left {
   display: flex;

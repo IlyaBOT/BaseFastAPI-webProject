@@ -21,7 +21,7 @@ SESSIONS: dict[str, dict] = {}
 
 def create_session(user_id: int) -> str:
     token = base64.urlsafe_b64encode(os.urandom(24)).decode()
-    SESSIONS[token] = {"user_id": user_id, "created": datetime.utcnow()}
+    SESSIONS[token] = {"user_id": user_id, "created": datetime.now()}
     return token
 
 def get_current_user(session_token: Optional[str] = Cookie(None)):

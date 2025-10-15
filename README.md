@@ -30,5 +30,7 @@ docker compose up --build
 
 # Для Windows
 ![Miku gif](https://media1.tenor.com/m/FZZqna91PwQAAAAC/miku-hatsune-miku.gif)
-Скачиваем в интернете Докер, а дальше сами 0w0 
+Ссылка на docker - https://www.docker.com/  
+Ссылка на git - https://git-scm.com/ 
+А ПОТОМ К ЛЮСЕ
 

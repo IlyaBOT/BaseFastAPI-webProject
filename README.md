@@ -30,3 +30,4 @@ docker compose up --build
 
 # Для Windows
 Скачиваем в интернете Докер, а дальше сами 0w0 
+![Miku gif](https://media1.tenor.com/m/FZZqna91PwQAAAAC/miku-hatsune-miku.gif)

@@ -27,3 +27,6 @@ sudo usermod -aG docker $USER
 ```sh
 docker compose up --build
 ```
+
+# Для Windows
+Скачиваем в интернете Докер, а дальше сами 0w0 

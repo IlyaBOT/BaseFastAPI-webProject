@@ -18,7 +18,7 @@
                     <li><a href="/register">Регистрация</a></li>
                     {% endif %}
                     {% if user %} 
-                        <li><a href="/user/{{ user.id if user else '' }}">Личный кабинет</a></li> 
+                        <li><a href="/user/{{ user.id if user else '' }}">Личный кабинет ({{ user.nickname }})</a></li> 
                     {% endif %}
                     {% if user and user.is_admin %}
                         <li><a href="/admin">Админка</a></li>

@@ -15,11 +15,14 @@
 
     <form class="card" method="post" action="/user/{{ user.id }}/edit" enctype="multipart/form-data">
       <div style="flex:0 0 180px;text-align:center;">
+        <!-- скрытое поле для base64 или маркера удаления -->
+        <input type="hidden" id="avatar_b64" name="avatar_b64" value="">
+
         <!-- превью аватарки -->
         {% if user.avatar %}
           <img id="avatarPreview" src="data:image/png;base64,{{ user.avatar }}" alt="Avatar" style="width:160px;height:160px;border-radius:8px;object-fit:cover;border:1px solid #ddd;">
         {% else %}
-          <img id="avatarPreview" src="{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Avatar" style="width:160px;height:160px;border-radius:8px;object-fit:cover;border:1px solid #ddd;background:#fff;padding:8px;">
+          <img id="avatarPreview" src="{{ request.url_for('resources', path='img/base_avatar.svg') }}" alt="Avatar" style="width:160px;height:160px;border-radius:8px;object-fit:cover;border:1px solid #ddd;background:#fff;padding:8px;">
         {% endif %}
 
         <div style="margin-top:10px;">
@@ -90,7 +93,7 @@
   removeBtn.addEventListener('click', () => {
     avatarB64Input.value = '__DELETE__'; // спец-маркер, чтобы сервер удалил аватар
     // поставим превью в дефолтный static
-    preview.src = "{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}";
+    preview.src = "{{ request.url_for('resources', path='img/base_avatar.svg') }}";
   });
 </script>
 

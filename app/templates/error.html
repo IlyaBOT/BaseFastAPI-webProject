@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="error-container">
-  <div class="error-section">
-    <h1>Ошибка {{ error }}</h1>
-    {{if error = '403'}}
-    <p class="label-bold">ДОСТУП ЗАБОРОНЕНО ЁБА НАХ</p>
-    {{endif}}
+<div class="error-container" style="max-width:700px;margin:40px auto;text-align:center;">
+  <h2>Ошибка {{ code }}</h2>
+  <p style="margin-top:10px;">{{ message }}</p>
+  <div style="margin-top:20px;">
+    <a href="/" class="button">На главную</a>
   </div>
 </div>
 {% endblock %}

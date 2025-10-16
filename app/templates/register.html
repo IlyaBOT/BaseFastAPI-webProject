@@ -7,17 +7,17 @@
       <p class="error">{{ error }}</p>
     {% endif %}
     <form method="post" action="/register" class="card">
-        <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username" required>
+        <!-- <label for="username">Имя пользователя:</label> -->
+        <input placeholder="Логин" type="text" id="username" name="username" required>
 
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" required>
+        <!-- <label for="email">E-mail:</label> -->
+        <input placeholder="Email" type="email" id="email" name="email" required>
 
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" required>
+        <!-- <label for="password">Пароль:</label> -->
+        <input placeholder="Пароль" type="password" id="password" name="password" minlength="4" required>
 
-        <label for="confirm_password">Подтверждение пароля:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required>
+        <!-- <label for="confirm_password">Подтверждение пароля:</label> -->
+        <input placeholder="Подтверждение пароля" type="password" id="confirm_password" name="confirm_password" minlength="4" required>
 
         <button type="submit" class="button">Зарегистрироваться</button>
     </form>

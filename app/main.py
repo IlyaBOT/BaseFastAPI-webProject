@@ -1,5 +1,7 @@
 # app/main.py
 from fastapi import FastAPI, Request, Form, Response, Depends
+from fastapi import HTTPException
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -28,6 +30,34 @@ app = FastAPI()
 app.mount('/resources', StaticFiles(directory='app/resources'), name='resources')
 app.mount('/static', StaticFiles(directory='app/static'), name='static')
 templates = Jinja2Templates(directory='app/templates')
+
+# Обработчик FastAPI/Starlette‐исключений (404, 403, 502, 500 и др.)
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    code = exc.status_code
+    messages = {
+        404: "Страница не найдена",
+        403: "Доступ запрещён",
+        500: "Внутренняя ошибка сервера",
+        502: "Плохой шлюз",
+    }
+    message = messages.get(code, exc.detail if getattr(exc, "detail", None) else "Произошла ошибка")
+    # возвращаем страницу ошибки с нужным кодом
+    return templates.TemplateResponse(
+        "error.html",
+        {"request": request, "code": code, "message": message},
+        status_code=code,
+    )
+
+# Обработчик всех прочих непойманных исключений (500)
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    # здесь вы можете залогировать `exc`, если нужно
+    return templates.TemplateResponse(
+        "error.html",
+        {"request": request, "code": 500, "message": "Ошибка сервера"},
+        status_code=500,
+    )
 
 # создаём таблицы при старте
 @app.on_event('startup')
@@ -133,17 +163,23 @@ def twofa_post(request: Request, code: str = Form(...)):
 # Профиль
 @app.get('/user/{user_id}', response_class=HTMLResponse)
 def profile(request: Request, user_id: int, current_user=Depends(get_current_user)):
-    if not current_user or current_user.id != user_id:
-        # Если пользователь не авторизован или пытается смотреть чужой профиль — редирект на свой профиль или на логин
-        return RedirectResponse(url="/login")
-    
-    user = get_user_by_id(user_id)
-    if not user:
-        return Response('Пользователь не найден', status_code=404)
+    # Проверка прав: если не залогинен или заходит в чужой профиль, отдаем 403
+    if not current_user or not (current_user.id == user_id or current_user.id == 1):
+        raise HTTPException(status_code=403)
 
-    # editable можно оставить только для самого пользователя
-    editable = True
-    return templates.TemplateResponse('profile.html', {'request': request, 'user': user, 'editable': editable})
+    # Получаем пользователя по ID
+    user = get_user_by_id(user_id)
+    # Если такого пользователя нет, отдаем 404
+    if not user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+
+    # editable только для самого пользователя или администратора
+    editable = current_user.id == user.id or current_user.id == 1
+
+    return templates.TemplateResponse(
+        'profile.html',
+        {'request': request, 'user': user, 'editable': editable}
+    )
 
 @app.get('/user/{user_id}/edit', response_class=HTMLResponse)
 def edit_profile_get(request: Request, user_id: int, current_user=Depends(get_current_user)):
@@ -175,9 +211,14 @@ def edit_profile_post(
 ):
     # САМАЯ ВАЖНАЯ ЧАСТЬ: жёсткая проверка прав
     if not current_user or not (current_user.id == user_id or current_user.id == 1):
-        # можно возвращать 403 либо редирект на логин/профиль
-        return RedirectResponse('/login')
-
+        # вызовет 403 и отправит на error.html
+        raise HTTPException(status_code=403)
+    # Получаем пользователя по ID
+    user = get_user_by_id(user_id)
+    # Если такого пользователя нет, отдаем 404
+    if not user:
+        # вызовет 404 и отправит на error.html
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
     # далее — твоя логика валидации/обновления (как было)
     if password and password != password_confirm:
         user = get_user_by_id(user_id)

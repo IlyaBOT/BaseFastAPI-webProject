@@ -7,14 +7,13 @@
       <p class="error">{{ error }}</p>
     {% endif %}
     <form method="post" action="/login" class="card">
-        <label for="login">Логин:</label>
-        <input type="text" id="login" name="login" required>
+        <!-- <label for="login">Логин:</label> -->
+        <input type="text" id="login" name="login" minlength="3" required>
 
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" required>
+        <!-- <label for="password">Пароль:</label> -->
+        <input type="password" id="password" name="password" minlength="4" required>
 
         <button type="submit" class="button">Войти</button>
-        <button type="button" class="cookie-button" id="testCookieBtn">Test cookie</button>
     </form>
     <p style="margin-top: 15px; font-size: 0.95rem; text-align: center;">
       Нет аккаунта? <a href="/register" style="color: #FF4B2B; text-decoration: none; font-weight: 600;">Зарегистрируйтесь</a>.

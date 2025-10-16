@@ -133,11 +133,17 @@ def twofa_post(request: Request, code: str = Form(...)):
 # Профиль
 @app.get('/user/{user_id}', response_class=HTMLResponse)
 def profile(request: Request, user_id: int, current_user=Depends(get_current_user)):
+    if not current_user or current_user.id != user_id:
+        # Если пользователь не авторизован или пытается смотреть чужой профиль — редирект на свой профиль или на логин
+        return RedirectResponse(url="/login")
+    
     user = get_user_by_id(user_id)
     if not user:
         return Response('Пользователь не найден', status_code=404)
-    editable = current_user and (current_user.id == user.id or current_user.id == 1)
-    return templates.TemplateResponse('profile.html', {'request': request, 'user': current_user, 'user': user, 'editable': editable})
+
+    # editable можно оставить только для самого пользователя
+    editable = True
+    return templates.TemplateResponse('profile.html', {'request': request, 'user': user, 'editable': editable})
 
 @app.get('/user/{user_id}/edit', response_class=HTMLResponse)
 def edit_profile_get(request: Request, user_id: int, current_user=Depends(get_current_user)):

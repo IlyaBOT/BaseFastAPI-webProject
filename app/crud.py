@@ -2,12 +2,44 @@ from sqlmodel import Session, select
 from .database import engine
 from .models import User
 from passlib.context import CryptContext
-from typing import Optional
-pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
-
+from typing import Optional 
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto") 
+from datetime import datetime
+from sqlmodel import select
+from .models import UserSession as SessionModel
 def get_session():
     return Session(engine)
 
+# ✅ Создание сессии
+def create_session_db(user_id: int, token: str, expires: datetime) -> SessionModel:
+    with get_session() as s:
+        session = SessionModel(token=token, user_id=user_id, created=datetime.utcnow(), expires=expires)
+        s.add(session)
+        s.commit()
+        s.refresh(session)
+        return session
+
+# ✅ Получение сессии по токену
+def get_session_by_token(token: str) -> Optional[SessionModel]:
+    with get_session() as s:
+        statement = select(SessionModel).where(SessionModel.token == token)
+        result = s.exec(statement).first()
+        if result and result.expires > datetime.utcnow():
+            return result
+        return None
+
+# ✅ Удаление сессии
+def delete_session_db(token: str) -> bool:
+    with get_session() as s:
+        statement = select(SessionModel).where(SessionModel.token == token)
+        result = s.exec(statement).first()
+        if not result:
+            return False
+        s.delete(result)
+        s.commit()
+        return True
+
+# Пользователи
 def get_user_by_id(user_id: int) -> Optional[User]:
     with get_session() as s:
         return s.get(User, user_id)
@@ -36,7 +68,6 @@ def create_user(nickname: str, email: str, password_plain: str, **kwargs) -> Use
         s.refresh(user)
         return user
 
-# Создание с явным id (для admin на старте)
 def create_user_raw(id: int, nickname: str, email: str, password_plain: str, **kwargs) -> User:
     with get_session() as s:
         existing = s.get(User, id)

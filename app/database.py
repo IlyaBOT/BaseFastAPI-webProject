@@ -2,6 +2,7 @@ import os
 import time
 from sqlmodel import create_engine
 from dotenv import load_dotenv
+from sqlalchemy.exc import OperationalError
 
 load_dotenv()
 

@@ -27,3 +27,10 @@ sudo usermod -aG docker $USER
 ```sh
 docker compose up --build
 ```
+
+# Для Windows
+![Miku gif](https://media1.tenor.com/m/FZZqna91PwQAAAAC/miku-hatsune-miku.gif)
+Ссылка на docker - https://www.docker.com/  
+Ссылка на git - https://git-scm.com/ 
+А ПОТОМ К ЛЮСЕ
+

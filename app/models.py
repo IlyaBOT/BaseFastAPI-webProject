@@ -12,6 +12,7 @@ class User(SQLModel, table=True):
     phone: Optional[str] = None
     is_2fa_enabled: bool = False
     otp_secret: Optional[str] = None 
+    avatar: Optional[str] = None
 
 class UserSession(SQLModel, table=True):
     token: str = Field(primary_key=True, index=True)

@@ -237,16 +237,14 @@ def edit_profile_post(
         fields['phone'] = phone
     if password:
         fields['password_hash'] = pwd_context.hash(password)
-
-    # avatar_b64 handling as you already had (delete marker or store)
+        
     if avatar_b64:
         if avatar_b64 == '__DELETE__':
             fields['avatar'] = None
         else:
             MAX_B64 = 1_000_000
             if len(avatar_b64) > MAX_B64:
-                user = get_user_by_id(user_id)
-                return templates.TemplateResponse('edit_profile.html', {'request': request, 'user': user, 'error': 'Файл слишком большой', 'editable': True})
+                return templates.TemplateResponse(..., {'error':'Файл слишком большой'})
             fields['avatar'] = avatar_b64
 
     update_user(user_id, **fields)

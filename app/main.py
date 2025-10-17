@@ -25,7 +25,8 @@ import base64
 import io
 from io import BytesIO
 from datetime import timedelta
-from PIL import Image
+from binascii import Error as B64DecodeError
+from PIL import Image, UnidentifiedImageError
 
 app = FastAPI()
 app.mount('/resources', StaticFiles(directory='app/resources'), name='resources')
@@ -56,7 +57,11 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
     # здесь вы можете залогировать `exc`, если нужно
     tmp = request.cookies.get('tmp_user')
     if not tmp:
-        return RedirectResponse('/login')
+        return templates.TemplateResponse(
+        "error.html",
+        {"request": request, "code": 520, "message": "Неизвестная ошибка"},
+        status_code=520,
+    )
     user_id = int(tmp)
     user = get_user_by_id(user_id)
     
@@ -246,6 +251,7 @@ def edit_profile_post(
         fields['password_hash'] = pwd_context.hash(password)
         
     if avatar_b64:
+        print("[DEBUG] avatar_b64=='" + avatar_b64 + "'")
         if avatar_b64 == '__DELETE__':
             fields['avatar'] = None
         else:
@@ -253,7 +259,29 @@ def edit_profile_post(
             try:
                 raw_data = base64.b64decode(avatar_b64)
                 img = Image.open(BytesIO(raw_data))
-            except Exception:
+                
+                # Если img — это RGBA-изображение, содержащее слой прозрачности
+                if img.mode in ('RGBA', 'LA') or ('transparency' in img.info):
+                    # приводим к RGBA
+                    img = img.convert("RGBA")
+                    # создаём белый фон того же размера
+                    background = Image.new('RGBA', img.size, (255, 255, 255, 255))
+                    # используем alpha_composite, безопасный способ сочетать изображения с альфой
+                    img = Image.alpha_composite(background, img)
+
+                # И теперь уже конвертим в RGB
+                img = img.convert('RGB')
+                img.thumbnail((256, 256))
+
+                # Сохраняем как JPEG
+                buffer = BytesIO()
+                img.save(buffer, format='JPEG', quality=85)
+                # Кодируем в base64
+                compressed_b64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+                # Сохраняем сжатый-base64 в поле avatar
+                fields['avatar'] = compressed_b64
+            except (B64DecodeError, UnidentifiedImageError, Exception) as e:
                 user = get_user_by_id(user_id)
                 return templates.TemplateResponse(
                     "edit_profile.html",
@@ -264,20 +292,8 @@ def edit_profile_post(
                         "error": f"{e.__class__.__name__}: {e}",
                         "editable": True,
                     })
-            # преобразуем в RGB (если PNG с прозрачностью) и уменьшаем до 256×256
-            img = img.convert('RGB')
-            img.thumbnail((256, 256))  # thumbnail() уменьшает изображение до указанного размера:contentReference[oaicite:2]{index=2}
 
-            # сохраняем как JPEG в память
-            buffer = BytesIO()
-            img.save(buffer, format='JPEG', quality=85)
-            # кодируем обратно в base64
-            compressed_b64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-
-            # сохраняем в поля обновления
-            fields['avatar'] = compressed_b64
-
-    # применяем обновления в БД
+    # Отправляем изменения в БД
     update_user(user_id, **fields)
     return RedirectResponse(f'/user/{user_id}', status_code=303)
 
@@ -327,7 +343,6 @@ def admin_panel(request: Request, current_user=Depends(get_current_user)):
         return RedirectResponse('/login')
     users = list_users()
     return templates.TemplateResponse('admin.html', {'request': request, 'users': users})
-
 
 @app.post('/admin/create')
 def admin_create(

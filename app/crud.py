@@ -85,9 +85,14 @@ def update_user(user_id: int, **fields) -> Optional[User]:
         user = s.get(User, user_id)
         if not user:
             return None
-        for k, v in fields.items():
-            if hasattr(user, k) and v is not None:
-                setattr(user, k, v)
+        for key, value in fields.items():
+            # Разрешаем ЯВНО ставить None в avatar
+            if key == "avatar":
+                setattr(user, "avatar", value)  # даже если None — ок, будет NULL
+            else:
+                if value is not None:
+                    setattr(user, key, value)
+                # Если value is None для других полей — пропускаем (как раньше)
         s.add(user)
         s.commit()
         s.refresh(user)

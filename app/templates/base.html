@@ -1,41 +1,67 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>{{ title if title else "My FastAPI Project" }}</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
     <header>
-        <div class="container">
-            <h1 class="logo"><a href="/">FastAPI Web-Project</a></h1>
-            <nav>
-                <ul>
-                    {% if not user %}
-                        <li><a href="/login">Вход</a></li>
-                    {% endif %}
-                    {% if not user %}
-                    <li><a href="/register">Регистрация</a></li>
-                    {% endif %}
-                    {% if user %} 
-                        <li><a href="/user/{{ user.id if user else '' }}">Личный кабинет ({{ user.nickname }})</a></li> 
-                    {% endif %}
-                    {% if user and user.is_admin %}
-                        <li><a href="/admin">Админка</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <h1 class="logo roboto-font"><a href="/">FastAPI Web-Project</a></h1>
+        <nav>
+          <ul>
+            {% if not user %}
+            <li><a href="/login">Вход</a></li>
+            {% endif %} {% if not user %}
+            <li><a href="/register">Регистрация</a></li>
+            {% endif %} {% if user %}
+            <li>
+              <a href="/user/{{ user.id if user else '' }}"
+                >Личный кабинет ({{ user.nickname }})</a
+              >
+            </li>
+            {% endif %} {% if user and user.is_admin %}
+            <li><a href="/admin">Админка</a></li>
+            {% endif %}
+            <button id="theme-toggle-btn" class="theme-toggle-btn">🌓</button>
+          </ul>
+        </nav>
+      </div>
     </header>
-    
-    <main class="container">
-        {% block content %}{% endblock %}
-    </main>
+
+    <main class="container">{% block content %}{% endblock %}</main>
 
     <footer>
-        <div class="container">
-            <p>&copy; IB-WorkShop. 2025. Все права защищены.</p>
-        </div>
+      <div class="container roboto-font">
+        <p>&copy; IB-WorkShop. 2025. Все права защищены.</p>
+      </div>
     </footer>
-</body>
+
+    <script>
+      (function () {
+        const toggleBtn = document.getElementById("theme-toggle-btn");
+        const root = document.documentElement;
+
+        // При загрузке — установить тему из localStorage или системной
+        const saved = localStorage.getItem("theme");
+        if (saved) {
+          root.setAttribute("data-theme", saved);
+        } else {
+          // если нет сохранённой темы — можно подставить системную
+          const mq = window.matchMedia("(prefers-color-scheme: dark)");
+          if (mq.matches) {
+            root.setAttribute("data-theme", "dark");
+          }
+        }
+
+        toggleBtn.addEventListener("click", () => {
+          const current = root.getAttribute("data-theme");
+          const next = current === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          localStorage.setItem("theme", next);
+        });
+      })();
+    </script>
+  </body>
 </html>

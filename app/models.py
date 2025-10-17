@@ -1,6 +1,8 @@
 from typing import Optional
 from sqlmodel import SQLModel, Field
+from sqlalchemy import Column
 from datetime import date, datetime, timedelta
+from sqlalchemy.dialects.mysql import MEDIUMTEXT  # или LONGTEXT
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -12,7 +14,10 @@ class User(SQLModel, table=True):
     phone: Optional[str] = None
     is_2fa_enabled: bool = False
     otp_secret: Optional[str] = None 
-    avatar: Optional[str] = None
+    avatar: Optional[str] = Field(
+        default=None,
+        sa_column=Column(MEDIUMTEXT)  # замените на LONGTEXT, если хотите ещё больше
+    )
 
 class UserSession(SQLModel, table=True):
     token: str = Field(primary_key=True, index=True)

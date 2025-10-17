@@ -11,4 +11,4 @@ aiofiles
 python-dotenv
 cryptography
 argon2-cffi
-
+pillow==12.0.0

@@ -1,6 +1,5 @@
 # app/main.py
-from fastapi import FastAPI, Request, Form, Response, Depends
-from fastapi import HTTPException
+from fastapi import FastAPI, Request, Form, Response, Depends, HTTPException
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -22,9 +21,11 @@ from .auth import create_session, get_current_user, destroy_session
 from typing import Optional
 import pyotp
 import qrcode
-import io
 import base64
+import io
+from io import BytesIO
 from datetime import timedelta
+from PIL import Image
 
 app = FastAPI()
 app.mount('/resources', StaticFiles(directory='app/resources'), name='resources')
@@ -53,6 +54,12 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception):
     # здесь вы можете залогировать `exc`, если нужно
+    tmp = request.cookies.get('tmp_user')
+    if not tmp:
+        return RedirectResponse('/login')
+    user_id = int(tmp)
+    user = get_user_by_id(user_id)
+    
     return templates.TemplateResponse(
         "error.html",
         {"request": request, "code": 500, "message": "Ошибка сервера"},
@@ -242,11 +249,35 @@ def edit_profile_post(
         if avatar_b64 == '__DELETE__':
             fields['avatar'] = None
         else:
-            MAX_B64 = 1_000_000
-            if len(avatar_b64) > MAX_B64:
-                return templates.TemplateResponse(..., {'error':'Файл слишком большой'})
-            fields['avatar'] = avatar_b64
+            # декодируем исходный base64
+            try:
+                raw_data = base64.b64decode(avatar_b64)
+                img = Image.open(BytesIO(raw_data))
+            except Exception:
+                user = get_user_by_id(user_id)
+                return templates.TemplateResponse(
+                    "edit_profile.html",
+                    {
+                        "request": request,
+                        "user": user,
+                        # в error передаём тип и описание исключения
+                        "error": f"{e.__class__.__name__}: {e}",
+                        "editable": True,
+                    })
+            # преобразуем в RGB (если PNG с прозрачностью) и уменьшаем до 256×256
+            img = img.convert('RGB')
+            img.thumbnail((256, 256))  # thumbnail() уменьшает изображение до указанного размера:contentReference[oaicite:2]{index=2}
 
+            # сохраняем как JPEG в память
+            buffer = BytesIO()
+            img.save(buffer, format='JPEG', quality=85)
+            # кодируем обратно в base64
+            compressed_b64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+            # сохраняем в поля обновления
+            fields['avatar'] = compressed_b64
+
+    # применяем обновления в БД
     update_user(user_id, **fields)
     return RedirectResponse(f'/user/{user_id}', status_code=303)
 

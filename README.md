@@ -16,21 +16,43 @@ echo \
 sudo apt-get update
 ```
 
-## Первоначальная настройка docker:
+## Установка docker на Arch:
+```sh
+sudo pacman -Sy docker
+sudo pacman -Sy docker-compose
+```
+Или
+```sh
+yay -S docker
+yay -S docker-compose
+```
+
+## Для Windows
+![Miku gif](https://media1.tenor.com/m/FZZqna91PwQAAAAC/miku-hatsune-miku.gif)
+
+[Скачать Docker Desktop](https://www.docker.com/) | [Скачать Git](https://git-scm.com/)<br>
+***Установка только с божьей помощью.***
+
+## Первоначальная настройка Docker в Linux:
 ```sh
 sudo usermod -aG docker $USER
 ```
 После этого выйдите из учётной записи пользователя и залогиньтесь назад, или перезапустите компьютер.
-
 
 ## Как запустить проект:
 ```sh
 docker compose up --build
 ```
 
-# Для Windows
-![Miku gif](https://media1.tenor.com/m/FZZqna91PwQAAAAC/miku-hatsune-miku.gif)
-Ссылка на docker - https://www.docker.com/  
-Ссылка на git - https://git-scm.com/ 
-А ПОТОМ К ЛЮСЕ
+## Как пересобрать проект полностью
+```sh
+docker compose build --no-cache web
+```
 
+## Как войти в окружение базы данных MySQL для ручного управления
+```sh
+docker-compose exec db mysql -u fastapi_user -pfastapi_pass fastapi_db
+```
+
+## Ошибки базы данных при мажорном обновлении
+Удалите папку **``mysql_data``** и запустите проект заново.

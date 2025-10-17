@@ -249,51 +249,37 @@ def edit_profile_post(
         fields['phone'] = phone
     if password:
         fields['password_hash'] = pwd_context.hash(password)
-        
+    
     if avatar_b64:
-        print("[DEBUG] avatar_b64=='" + avatar_b64 + "'")
+        # print("[DEBUG] avatar_b64=='" + avatar_b64 + "'")
         if avatar_b64 == '__DELETE__':
             fields['avatar'] = None
         else:
-            # декодируем исходный base64
+            # Декодируем исходный base64
             try:
                 raw_data = base64.b64decode(avatar_b64)
                 img = Image.open(BytesIO(raw_data))
-                
-                # Если img — это RGBA-изображение, содержащее слой прозрачности
-                if img.mode in ('RGBA', 'LA') or ('transparency' in img.info):
-                    # приводим к RGBA
-                    img = img.convert("RGBA")
-                    # создаём белый фон того же размера
-                    background = Image.new('RGBA', img.size, (255, 255, 255, 255))
-                    # используем alpha_composite, безопасный способ сочетать изображения с альфой
-                    img = Image.alpha_composite(background, img)
 
-                # И теперь уже конвертим в RGB
+                if img.mode in ('RGBA', 'LA') or ('transparency' in img.info):
+                    img = img.convert("RGBA")
+                    bg = Image.new('RGBA', img.size, (255, 255, 255, 255))
+                    img = Image.alpha_composite(bg, img)
+
                 img = img.convert('RGB')
                 img.thumbnail((256, 256))
 
-                # Сохраняем как JPEG
                 buffer = BytesIO()
-                img.save(buffer, format='JPEG', quality=85)
-                # Кодируем в base64
+                img.save(buffer, format='JPEG', quality=95)
                 compressed_b64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-
-                # Сохраняем сжатый-base64 в поле avatar
                 fields['avatar'] = compressed_b64
             except (B64DecodeError, UnidentifiedImageError, Exception) as e:
-                user = get_user_by_id(user_id)
-                return templates.TemplateResponse(
-                    "edit_profile.html",
-                    {
-                        "request": request,
-                        "user": user,
-                        # в error передаём тип и описание исключения
-                        "error": f"{e.__class__.__name__}: {e}",
-                        "editable": True,
-                    })
+                return templates.TemplateResponse('edit_profile.html', {
+                    'request': request,
+                    'user': user,
+                    'error': f"{e.__class__.__name__}: {e}",
+                    'editable': True
+                })
 
-    # Отправляем изменения в БД
     update_user(user_id, **fields)
     return RedirectResponse(f'/user/{user_id}', status_code=303)
 

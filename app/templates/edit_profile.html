@@ -2,7 +2,6 @@
 {% block content %}
 <div class="container" style="max-width:700px;">
   <h2>Редактирование профиля</h2>
-
   {% if not editable %}
     <p class="error" style="color:#c0392b;">У вас нет прав для редактирования этого профиля.</p>
     <div style="margin-top:12px;">
@@ -12,29 +11,25 @@
     {% if error %}
       <p class="error">{{ error }}</p>
     {% endif %}
-
     <form class="card" method="post" action="/user/{{ user.id }}/edit" enctype="multipart/form-data">
       <div style="flex:0 0 180px;text-align:center;">
-        <!-- скрытое поле для base64 или маркера удаления -->
-        <input type="hidden" id="avatar_b64" name="avatar_b64" value="">
-
-        <!-- превью аватарки -->
         {% if user.avatar %}
-          <img id="avatarPreview" src="data:image/png;base64,{{ user.avatar }}" alt="Avatar" style="width:160px;height:160px;border-radius:8px;object-fit:cover;border:1px solid #ddd;">
+          <img id="avatarPreview" src="data:image/jpeg;base64,{{ user.avatar }}" alt="Avatar" style="width:160px;height:160px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
         {% else %}
-          <img id="avatarPreview" src="{{ request.url_for('resources', path='img/base_avatar.svg') }}" alt="Avatar" style="width:160px;height:160px;border-radius:8px;object-fit:cover;border:1px solid #ddd;background:#fff;padding:8px;">
+          <img id="avatarPreview" src="{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Avatar" style="width:160px;height:160px;object-fit:cover;border-radius:8px;border:1px solid #ddd;background:#fff;padding:8px;">
         {% endif %}
-
         <div style="margin-top:10px;">
           <label for="avatarFile" class="button">Загрузить</label>
           <input id="avatarFile" type="file" accept="image/*" style="display:none;">
         </div>
-
         <div style="margin-top:8px;">
           <button id="removeAvatarBtn" type="button">Удалить</button>
         </div>
       </div>
-      
+
+      <!-- скрытое поле, куда JS запишет base64 -->
+      <input type="hidden" id="avatar_b64" name="avatar_b64" value="">
+
       <label for="nickname">Никнейм / Имя</label>
       <input id="nickname" name="nickname" value="{{ user.nickname }}" type="text" required>
 
@@ -64,37 +59,73 @@
   {% endif %}
 </div>
 
+<!-- Подключаем библиотеку browser-image-compression через CDN -->
+<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.13/dist/browser-image-compression.js"></script>
 <script>
-  // Конвертация файла в base64 (убираем префикс data:image/...;base64,)
   const avatarFile = document.getElementById('avatarFile');
   const avatarB64Input = document.getElementById('avatar_b64');
   const preview = document.getElementById('avatarPreview');
   const removeBtn = document.getElementById('removeAvatarBtn');
 
-  avatarFile.addEventListener('change', () => {
-    const f = avatarFile.files[0];
-    if (!f) return;
-    if (!f.type.startsWith('image/')) {
+   avatarFile.addEventListener('change', async () => {
+    const file = avatarFile.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
       alert('Пожалуйста, выберите изображение.');
       return;
     }
+
+    // сначала читаем как Data URL
     const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result; // data:image/png;base64,.....
-      preview.src = result;
-      // сохраняем только base64 часть без префикса
-      const comma = result.indexOf(',');
-      avatarB64Input.value = comma >= 0 ? result.slice(comma + 1) : result;
+    reader.onload = async () => {
+      const dataUrl = reader.result;
+      const img = new Image();
+      img.onload = async () => {
+        // обрезаем к квадрату по центру
+        const w = img.width;
+        const h = img.height;
+        const side = Math.min(w, h);
+        const sx = (w - side) / 2;
+        const sy = (h - side) / 2;
+
+        // рисуем на canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = side;
+        canvas.height = side;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, sx, sy, side, side, 0, 0, side, side);
+
+        // теперь canvas содержит квадратный отсечённый центр
+        // получаем Blob из canvas
+        canvas.toBlob(async (blob) => {
+          try {
+            // сжимаем blob используя browser-image-compression
+            const options = {
+              maxSizeMB: 0.752,
+              maxWidthOrHeight: 1024,
+              useWebWorker: true,
+              initialQuality: 0.9,
+              maxIteration: 10
+            };
+            const compressedBlob = await imageCompression(blob, options);
+            const compressedDataUrl = await imageCompression.getDataUrlFromFile(compressedBlob);
+            preview.src = compressedDataUrl;
+            const comma = compressedDataUrl.indexOf(',');
+            avatarB64Input.value = comma >= 0 ? compressedDataUrl.slice(comma + 1) : compressedDataUrl;
+          } catch (err) {
+            console.error(err);
+            alert('Ошибка при сжатии изображения: ' + err.message);
+          }
+        }, 'image/jpeg');
+      };
+      img.src = dataUrl;
     };
-    reader.readAsDataURL(f);
+    reader.readAsDataURL(file);
   });
 
-  // удаление аватарки: очистим поле и поставим превью на дефолт (если есть)
   removeBtn.addEventListener('click', () => {
-    avatarB64Input.value = '__DELETE__'; // спец-маркер, чтобы сервер удалил аватар
-    // поставим превью в дефолтный static
-    preview.src = "{{ request.url_for('resources', path='img/base_avatar.svg') }}";
+    avatarB64Input.value = '__DELETE__';
+    preview.src = "{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}";
   });
 </script>
-
 {% endblock %}

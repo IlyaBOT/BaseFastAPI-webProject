@@ -13,10 +13,9 @@
         </div>
       {% else %}
         <div class="profile-avatar">
-          <img src="{{ user.avatar_url or request.url_for('static', path='resources/img/base_avatar.svg') }}" alt="Фото профиля">
+          <img src="{{ request.url_for('resources', path='img/base_avatar.svg') }}" alt="Фото профиля">
         </div>
       {% endif %}
-
       {% if editable %}
       <a href="/user/{{ user.id }}/edit" class="profile-btn roboto-font green">Редактировать профиль</a>
       <a href="/logout" class="profile-btn roboto-font red">Выйти из аккаунта</a>

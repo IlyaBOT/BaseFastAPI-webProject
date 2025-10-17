@@ -12,17 +12,25 @@
         <nav>
           <ul>
             {% if not user %}
-            <li><a href="/login">Вход</a></li>
-            {% endif %} {% if not user %}
-            <li><a href="/register">Регистрация</a></li>
-            {% endif %} {% if user %}
-            <li>
-              <a href="/user/{{ user.id if user else '' }}"
-                >Личный кабинет ({{ user.nickname }})</a
-              >
-            </li>
-            {% endif %} {% if user and user.is_admin %}
-            <li><a href="/admin">Админка</a></li>
+                <li><a href="/login">Вход</a></li>
+            {% endif %}
+            {% if not user %}
+                <li><a href="/register">Регистрация</a></li>
+            {% endif %}
+            {% if user %}
+                <li class="nav-user">
+                <a href="/user/{{ user.id }}">
+                    {% if user.avatar %}
+                        <img class="nav-avatar-small" src="data:image/png;base64,{{ user.avatar }}" alt="Фото профиля" width="42" height="42">
+                    {% else %}
+                        <img class="nav-avatar-small" src="{{ request.url_for('resources', path='img/base_avatar.svg') }}" alt="Фото профиля" width="42" height="42">
+                    {% endif %}
+                    <span class="nav-username">{{ user.nickname }}</span>
+                </a>
+                </li>
+            {% endif %}
+            {% if user and user.is_admin %}
+                <li><a href="/admin">Админка</a></li>
             {% endif %}
             <button id="theme-toggle-btn" class="theme-toggle-btn">🌓</button>
           </ul>

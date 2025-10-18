@@ -335,7 +335,7 @@ def disable_2fa(user_id: int, current_user=Depends(get_current_user)):
     if not current_user or not (current_user.id == user_id or current_user.id == 1):
         return RedirectResponse('/login')
     update_user(user_id, is_2fa_enabled=False, otp_secret=None)
-    return RedirectResponse(f'/user/{user_id}')
+    return RedirectResponse(f'/user/{user_id}', status_code=303)
 
 @app.post('/user/{user_id}/2fa_enable')
 def enable_2fa(user_id: int, code: str = Form(...), current_user=Depends(get_current_user)):

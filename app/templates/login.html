@@ -7,13 +7,16 @@
       <p class="error">{{ error }}</p>
     {% endif %}
     <form method="post" action="/login" class="card">
-        <!-- <label for="login">Логин:</label> -->
         <input type="text" id="login" name="login" placeholder="Логин" minlength="3" required>
 
-        <!-- <label for="password">Пароль:</label> -->
         <input type="password" id="password" name="password" placeholder="Пароль" minlength="4" required>
 
-        <button type="submit" class="button">Войти</button>
+        {% if show_2fa %}
+        <!-- Показываем поле для кода только если есть 2FA -->
+        <input type="text" id="code" name="code" placeholder="Код из Google Authenticator" pattern="\d{6}" style="margin-top:8px;">
+        {% endif %}
+
+        <button type="submit" class="button" style="margin-top:10px;">Войти</button>
     </form>
     <p style="margin-top: 15px; font-size: 0.95rem; text-align: center;">
       Нет аккаунта? <a href="/register" style="color: #FF4B2B; text-decoration: none; font-weight: 600;">Зарегистрируйтесь</a>.
@@ -22,20 +25,7 @@
 
   <div class="info-list">
     <h2>С возвращением 😸</h2>
-    <p>Рады видеть вас снова!  
-       Войдите, чтобы продолжить общение и делать этот мир чуть уютнее </p>
+    <p>Рады видеть вас снова! Войдите, чтобы продолжить общение.</p>
   </div>
 </div>
-
-<script>
-  document.getElementById('testCookieBtn').addEventListener('click', () => {
-    const cookies = document.cookie.split(';').map(c => c.trim());
-    const token = cookies.find(c => c.startsWith('session_token='));
-    if (token) {
-      alert('Session token: ' + token.split('=')[1]);
-    } else {
-      alert('Кука session_token не найдена (возможно, установлена как HttpOnly)');
-    }
-  });
-</script>
 {% endblock %}

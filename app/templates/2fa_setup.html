@@ -11,13 +11,14 @@
     {% endif %}
     <form method="post" action="/2fa_check" style="margin-top:12px;">
       <label for="code">Код:</label>
-      <input id="code" name="code" type="text" required autofocus style="padding:8px;width:220px;margin:8px 0;">
+      <input id="code" name="code" type="text" pattern="\d{6}" required autofocus
+             style="padding:8px;width:220px;margin:8px 0;" placeholder="6 цифр">
       <br>
       <button type="submit" class="button">Продолжить</button>
       <a href="/login" style="margin-left:12px;color:#666;text-decoration:none;">Отмена</a>
     </form>
   {% else %}
-    <!-- Страница настройки 2FA для авторизованного пользователя -->
+    <!-- Настройка 2FA -->
     <div style="display:flex;gap:24px;align-items:flex-start;">
       <div style="flex:1;min-width:280px;">
         <p style="margin:0 0 8px 0;"><strong>Текущий статус:</strong></p>
@@ -34,7 +35,6 @@
             <button type="submit" class="button" style="background:#e74c3c;border:none;padding:10px 14px;color:#fff;border-radius:6px;">Отключить 2FA</button>
           </form>
         {% else %}
-          <!-- Переключатель / кнопка включения -->
           <button id="showSetupBtn" type="button" class="button" style="background:#2ecc71;border:none;padding:10px 14px;color:#fff;border-radius:6px;">
             Включить 2FA
           </button>
@@ -42,8 +42,6 @@
       </div>
     </div>
 
-    <!-- Блок настройки (скрыт по умолчанию, но присутствует в шаблоне).
-         Когда пользователь нажимает "Включить 2FA", JS раскрывает этот блок. -->
     {% if not user.is_2fa_enabled %}
     <div id="setupBlock" style="margin-top:22px;display:none;border:1px solid #eee;padding:18px;border-radius:8px;background:#fafafa;">
       <h3 style="margin-top:0;">Настройка 2FA</h3>
@@ -78,9 +76,11 @@
             <p style="color:#c0392b;font-weight:600;">{{ error }}</p>
           {% endif %}
 
+          <!-- Вот правильная форма для включения 2FA -->
           <form method="post" action="/user/{{ user.id }}/2fa_enable" style="margin-top:8px;">
             <label for="code_enable">Код из приложения:</label>
-            <input id="code_enable" name="code" type="text" required style="padding:8px;width:220px;margin:8px 0;">
+            <input id="code_enable" name="code" type="text" pattern="\d{6}" required
+                   style="padding:8px;width:220px;margin:8px 0;" placeholder="6 цифр" autofocus>
             <br>
             <button type="submit" class="button" style="background:#2ecc71;border:none;padding:10px 14px;color:#fff;border-radius:6px;">Подтвердить и включить 2FA</button>
             <a href="/user/{{ user.id }}" style="margin-left:12px;color:#666;text-decoration:none;">Отмена</a>
@@ -93,23 +93,19 @@
 </div>
 
 <script>
-  // только для не-checking режима: показываем/скрываем блок настройки
   (function(){
     const showBtn = document.getElementById('showSetupBtn');
     const setup = document.getElementById('setupBlock');
     if (showBtn && setup) {
       showBtn.addEventListener('click', () => {
-        // раскрываем блок и скроллим к нему
         setup.style.display = 'block';
         setup.scrollIntoView({behavior: 'smooth', block: 'center'});
       });
     }
 
-    // Кнопка копирования секрета (удобство для пользователя)
     const copyBtn = document.getElementById('copySecretBtn');
     if (copyBtn) {
       copyBtn.addEventListener('click', async () => {
-        // берем текст из шаблона
         const secretEl = document.querySelector('code');
         if (!secretEl) return;
         const text = secretEl.textContent.trim();
@@ -118,7 +114,6 @@
           copyBtn.textContent = 'Скопировано';
           setTimeout(()=> copyBtn.textContent = 'Копировать', 1500);
         } catch (e) {
-          // fallback
           alert('Не удалось скопировать автоматически. Скопируйте вручную: ' + text);
         }
       });

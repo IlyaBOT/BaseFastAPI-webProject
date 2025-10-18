@@ -124,23 +124,27 @@ def register_post(
 def login_get(request: Request):
     return templates.TemplateResponse('login.html', {'request': request, 'error': None})
 
+# Логин
 @app.post('/login')
 def login_post(request: Request, login: str = Form(...), password: str = Form(...)):
     user = get_user_by_login(login)
     if not user or not verify_password(password, user.password_hash):
         return templates.TemplateResponse('login.html', {'request': request, 'error': 'Неправильные учётные данные'})
-    # Если включена 2FA — перенаправляем на страницу ввода кода
+
+    # Если у пользователя включена 2FA
     if user.is_2fa_enabled:
-        resp = RedirectResponse(url=f'/2fa_check?user_id={user.id}', status_code=303)
+        # Сохраняем временно id пользователя в куке и перенаправляем на страницу ввода кода
+        resp = RedirectResponse(url='/2fa_check', status_code=303)
         resp.set_cookie('tmp_user', str(user.id), httponly=True)
         return resp
+
+    # Если 2FA нет, создаём сессию сразу
     resp = RedirectResponse(url=f'/user/{user.id}', status_code=303)
     token = create_session(user.id)
-    # кука на 30 дней, HttpOnly для безопасности
     resp.set_cookie(
         key="session_token",
         value=token,
-        max_age=60*60*24*30,       # 30 дней в секундах
+        max_age=60*60*24*30,
         httponly=True,
         samesite="lax"
     )
@@ -157,21 +161,22 @@ def twofa_get(request: Request, user_id: Optional[int] = None):
 def twofa_post(request: Request, code: str = Form(...)):
     tmp = request.cookies.get('tmp_user')
     if not tmp:
-        return RedirectResponse('/login')
+        return RedirectResponse('/login', status_code=303)
     user_id = int(tmp)
     user = get_user_by_id(user_id)
     if not user or not user.otp_secret:
         return templates.TemplateResponse('2fa_setup.html', {'request': request, 'checking': True, 'error': '2FA не настроена'})
+
     totp = pyotp.TOTP(user.otp_secret)
     if not totp.verify(code):
         return templates.TemplateResponse('2fa_setup.html', {'request': request, 'checking': True, 'error': 'Неверный код'})
-    # всё ок — создаём сессию
+
+    # Всё верно — создаём сессию
     resp = RedirectResponse(url=f'/user/{user.id}', status_code=303)
     token = create_session(user.id)
     resp.set_cookie('session_token', token, httponly=True)
     resp.delete_cookie('tmp_user')
     return resp
-
 # Профиль
 @app.get('/user/{user_id}', response_class=HTMLResponse)
 def profile(request: Request, user_id: int, current_user=Depends(get_current_user)):
@@ -284,6 +289,29 @@ def edit_profile_post(
     return RedirectResponse(f'/user/{user_id}', status_code=303)
 
 # 2FA setup (enable/disable)
+@app.post('/2fa_check')
+def twofa_post(request: Request, code: str = Form(...)):
+    tmp = request.cookies.get('tmp_user')
+    if not tmp:
+        return RedirectResponse('/login')
+    user_id = int(tmp)
+    user = get_user_by_id(user_id)
+    if not user or not user.otp_secret:
+        return templates.TemplateResponse('2fa_setup.html', {'request': request, 'checking': True, 'error': '2FA не настроена'})
+    totp = pyotp.TOTP(user.otp_secret)
+    if not totp.verify(code):
+        return templates.TemplateResponse('2fa_setup.html', {'request': request, 'checking': True, 'error': 'Неверный код'})
+
+    # ✅ Если код верный — включаем 2FA, если она была в процессе настройки
+    if not user.is_2fa_enabled:
+        update_user(user_id, is_2fa_enabled=True)
+
+    # ✅ создаём сессию
+    resp = RedirectResponse(url=f'/user/{user.id}', status_code=303)
+    token = create_session(user.id)
+    resp.set_cookie('session_token', token, httponly=True)
+    resp.delete_cookie('tmp_user')
+    return resp 
 @app.get('/user/{user_id}/2fa', response_class=HTMLResponse)
 def setup_2fa_get(request: Request, user_id: int, current_user=Depends(get_current_user)):
     if not current_user or not (current_user.id == user_id or current_user.id == 1):
@@ -302,7 +330,6 @@ def setup_2fa_get(request: Request, user_id: int, current_user=Depends(get_curre
     img.save(buf, format='PNG')
     img_b64 = base64.b64encode(buf.getvalue()).decode()
     return templates.TemplateResponse('2fa_setup.html', {'request': request, 'user': current_user, 'qr': img_b64, 'secret': user.otp_secret, 'checking': False})
-
 @app.post('/user/{user_id}/2fa_disable')
 def disable_2fa(user_id: int, current_user=Depends(get_current_user)):
     if not current_user or not (current_user.id == user_id or current_user.id == 1):
@@ -320,7 +347,7 @@ def enable_2fa(user_id: int, code: str = Form(...), current_user=Depends(get_cur
     totp = pyotp.TOTP(user.otp_secret)
     if totp.verify(code):
         update_user(user_id, is_2fa_enabled=True)
-    return RedirectResponse(f'/user/{user_id}')
+    return RedirectResponse(f'/user/{user_id}', status_code=303)
 
 # Админ: список пользователей, создание, удаление
 @app.get('/admin', response_class=HTMLResponse)

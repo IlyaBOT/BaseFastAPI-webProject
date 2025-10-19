@@ -902,12 +902,13 @@ form.card input {
 .hero-section {
   position: relative;
   width: 100%;
-  height: 90vh;
+  height: auto;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
+  min-height: 60vh;
 }
 
 .hero-bg {
@@ -940,7 +941,7 @@ form.card input {
   justify-content: center;
   gap: 30px;
   flex-wrap: wrap;
-  padding: 60px 0;
+  padding: 40px 0;
 }
 
 .feature-card {

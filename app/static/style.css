@@ -1,14 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@400;700&display=swap');
+
+.roboto-font{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+}
+
+.lxgw-wenkai-mono-tc-regular {
+  font-family: "LXGW WenKai Mono TC", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lxgw-wenkai-mono-tc-bold {
+  font-family: "LXGW WenKai Mono TC", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+p{
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--text);
+}
+h1{
+  font-size: 2em;
+  font-weight: 600;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  color: var(--text);
+}
+h2{
+  font-size: 1.5em;
+  font-weight: 500;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  color: var(--text);
+}
+h3{
+  font-size: 1.17em;
+  font-weight: 450;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  color: var(--text);
+}
+h4{
+  font-size: 1em;
+  font-weight: 400;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  color: var(--text);
+}
+h5{
+  font-size: 0.83em;
+  font-weight: 400;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  color: var(--text);
+}
+h6{
+  font-size: 0.67em;
+  font-weight: 300;
+  font-weight: bold;
+  unicode-bidi: isolate;
+  color: var(--text);
+}
+
+.paragraph{
+  margin-left: 15px;
+  padding: 2px;
+}
+.centered{
+  text-align: center;
+}
+.topPadded{
+  padding-top: 8px;
+}
+
 :root {
-  --bg: #f5f5f7;
+  --bg: url("https://images.hdqwalls.com/wallpapers/asuna-and-kirito-sword-and-soul-o3.jpg");
+  --bg-color: #fff;
+  --bg-blur: rgba(255, 255, 255, 0.55);
   --fg: #1d1d1f;
+  --text: #000;
+  --header-text: #fff;
+  --button: #007aff;
+  --button-bg: #80bdff;
+  --button-green-bg: #2ECC71;
+  --button-green-bg-second: #124F2C;
+  --button-green-bg-third: #7EE2A8;
+  --button-red-bg: #D52C1B;
+  --button-red-bg-second: #4D100A;
+  --button-red-bg-third: #EC766A;
+  --link-text: #79bde9;
+
   --muted: #6e6e73;
   --accent: #007aff;
+  --accent-lighten: #80bdff;
+  --accent-darken: #003166;
+
   --card: rgba(255, 255, 255, 0.65);
-  --radius: 14px;
+  --radius: 16px;
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  --glass: blur(8px) saturate(180%);
+  --glass: blur(8px) saturate(120%);
   --transition: 240ms cubic-bezier(0.4, 0.1, 0.3, 1);
-  --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  --transition-btn: transform 80ms ease-in, background 0.2s;
+  /* --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Roboto", "Helvetica Neue", Arial, sans-serif; */
+}
+
+[data-theme="dark"] {
+  /* Переопределения для тёмной темы */
+  --bg-color: #fff;
+  --bg-blur: rgba(0, 0, 0, 0.32);
+  --fg: #eee;
+  --text: #fff;
+  --header-text: #fff;
+  --button: #007aff;
+  --button-bg: #80bdff;
+  --button-green-bg: #2ECC71;
+  --button-green-bg-second: #124F2C;
+  --button-green-bg-third: #7EE2A8;
+  --button-red-bg: #D52C1B;
+  --button-red-bg-second: #4D100A;
+  --button-red-bg-third: #EC766A;
+  --link-text: #79bde9;
+
+  --muted: #a0a0a0;
+  --accent: #3399ff;
+  --accent-darken: #80bdff;   /* В тёмной теме accent-darken и */
+  --accent-lighten: #003166; /* accent-lighten поменяны местами */
+
+  /* Можно менять фон — либо другая картинка, либо тёмный фон */
+  --bg: url("https://images.hdqwalls.com/wallpapers/minimal-waterfall-in-mountains-scenery-beautiful-5k-4a.jpg");
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent-darken);
 }
 
 * { box-sizing: border-box; }
@@ -16,28 +153,44 @@
 html, body {
   height: 100%;
   margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-stack);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  padding: 0;
 }
 
+body {
+  position: relative;
+  z-index: 0;
+  overflow-x: hidden;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+body.fade-out {
+  opacity: 0;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg) center center no-repeat;
+  background-size: cover;
+  z-index: -1;  /* за всем контентом */
+  /* transform: scale(1.05); */
+}
 
 .container {
   width: 100%;
-  max-width: 1100px;
+  max-width: 90%;
   margin: 0 auto;
   padding: 0 24px;
 }
-
 
 header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.55);
+  background: var(--bg-blur);
   backdrop-filter: var(--glass);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   padding: 0;
@@ -53,17 +206,16 @@ header .container {
 
 .logo a {
   text-decoration: none;
-  color: var(--fg);
+  color: var(--text);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   letter-spacing: -0.2px;
   transition: var(--transition);
 }
 
 .logo a:hover {
-  color: var(--accent);
+  color: var(--accent-darken);
 }
-
 
 nav ul {
   list-style: none;
@@ -76,18 +228,48 @@ nav ul {
 
 nav a {
   text-decoration: none;
-  color: var(--muted);
-  font-weight: 500;
+  color: var(--text);
   padding: 8px 12px;
   border-radius: 10px;
   transition: var(--transition);
+
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
 }
 
 nav a:hover {
-  color: var(--accent);
-  background: rgba(0, 122, 255, 0.08);
+  color: var(--accent-darken);
+  /* background: rgba(0, 122, 255, 0.08); */
 }
 
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-avatar-small {
+  width: 42px;
+  height: 42px;
+  background: var(--bg-color);
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+  /* можно бордюр тоненький, если нужен */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-username {
+  padding: 0px 0px 0px 8px;
+  font-weight: 600;
+  font-size: 1.25em;
+  line-height: 1;
+  vertical-align: middle;
+}
 
 main {
   display: flex;
@@ -129,8 +311,8 @@ main {
 
 
 .card {
-  background: var(--card);
-  backdrop-filter: var(--glass);
+  /* background: var(--card); */
+  /* backdrop-filter: var(--glass); */
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 20px;
@@ -180,7 +362,7 @@ input:focus, textarea:focus, select:focus {
   padding: 10px 16px;
   border-radius: 12px;
   background: var(--accent);
-  color: #fff;
+  color: var(--text);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
@@ -222,6 +404,7 @@ input:focus, textarea:focus, select:focus {
 
 
 footer {
+  background: var(--bg-blur);
   padding: 18px 0;
   color: #9a9a9f;
   text-align: center;
@@ -241,7 +424,7 @@ footer {
 @media (max-width: 900px) {
   header .container { flex-direction: column; align-items: flex-start; gap: 8px; }
   nav ul { flex-wrap: wrap; gap: 8px; }
-  .hero { padding: 24px; }
+  .hero { padding: 0px 24px 24px; }
 }
 .register-container {
   display: flex;
@@ -255,7 +438,8 @@ footer {
 
 .form-section {
   flex: 1;
-  background: #fff;
+  background: var(--bg-blur);
+  backdrop-filter: blur(12px) saturate(120%);
   padding: 40px 50px;
   display: flex;
   flex-direction: column;
@@ -266,11 +450,11 @@ footer {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--text);
 }
 
 form.card {
-  background: #fff;
+  /* background: var(--bg-blur); */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -304,14 +488,12 @@ form.card input {
   font-size: 14px;
 }
 
-
-
 .button {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   border-radius: 20px;
-  border: 1px solid #FF4B2B;
-  background-color: #FF4B2B;
-  color: #fff;
+  border: 1px solid var(--button-red-bg-secondary);
+  background-color: var(--button-red-bg);
+  color: var(--text);
   padding: 12px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -321,7 +503,7 @@ form.card input {
 }
 
 .button:hover {
-  background-color: #ff5b3c;
+  background-color: var(--button-red-bg-second);
 }
 
 .button:active {
@@ -340,7 +522,7 @@ form.card input {
 .info-list {
   flex: 1;
   background: linear-gradient(135deg, #FF4B2B, #FF416C);
-  color: #fff;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -350,12 +532,14 @@ form.card input {
 }
 
 .info-list h2 {
-  font-size: 28px;
+  font-size: 1.69em;
   margin-bottom: 10px;
+  text-wrap-mode: nowrap;
 }
 
 .info-list p {
   max-width: 320px;
+  font-size: 1.3em;
   font-weight: 300;
   line-height: 1.5;
 }
@@ -380,18 +564,6 @@ form.card input {
   border-top: 1px solid #ddd;
   padding-top: 10px;
 }
-
-.bio-text {
-  font-style: italic;
-  color: #444;
-  margin-top: 4px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  max-width: 100%;
-}
-
-
-
 
 .user-card {
   display: flex;
@@ -430,7 +602,6 @@ form.card input {
   transform: scale(1.03);
 }
 
-
 .user-card-right {
   flex: 1;
   display: flex;
@@ -452,12 +623,6 @@ form.card input {
   text-align: center;
 }
 
-.welcome-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
 .profile-card {
   display: flex;
   justify-content: space-between;
@@ -469,16 +634,6 @@ form.card input {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   font-family: "Arial", sans-serif;
   min-height: 420px;
-}
-
-
-.profile-left {
-  flex: 0 0 260px;
-  border-right: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px;
 }
 
 .avatar-box {
@@ -546,7 +701,6 @@ form.card input {
   background: #c0392b;
 }
 
-
 .profile-right {
   flex: 1;
   padding: 15px 25px;
@@ -567,7 +721,7 @@ form.card input {
   white-space: nowrap; 
   padding: 10px 18px;
   background-color: #2ecc71;
-  color: white;
+  color: var(--text);
   border-radius: 10px;
   text-decoration: none;
   font-weight: 600;
@@ -578,7 +732,6 @@ form.card input {
   max-width: 100%;
 }
 
-
 .edit-profile-btn:hover {
   background-color: #27ae60;
   transform: translateY(-2px);
@@ -586,24 +739,52 @@ form.card input {
 }
 
 .profile-container {
-    max-width: 1100px;
-    margin: 60px auto;
-    padding: 00px 20px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    border: 1.5px solid #bfbfbf;
-    border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  margin: 60px auto;
+  padding: 0px 24px 24px;
+
+  background: var(--bg-blur); /* лёгкий светлый фон */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0,0,0,0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+}
+
+/* Блики внутри */
+.liquidGlass-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  box-shadow:
+    inset 2px 2px 1px 0 rgba(255,255,255,0.5),
+    inset -1px -1px 1px 1px rgba(255,255,255,0.5);
+}
+
+/* Текст / контент поверх эффектов */
+.liquidGlass-text {
+  position: relative;
+  z-index: 3;
+  color: #000; /* или другой цвет текста, учитывая прозрачность */
+}
+
+/* Если хочешь: при наведении можно подсветку */
+.liquidGlass-wrapper:hover {
+  /* чуть усилить свет или тень */
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .profile-welcome {
+  text-align: center;
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 15px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #ccc; 
-  color: #111;
+  border-bottom: 2px solid var(--fg); 
+  color: var(--text);
 }
 
 .profile-layout {
@@ -622,8 +803,9 @@ form.card input {
   flex-direction: column;
   align-items: center;
   width: 300px; 
-  border-right: 2px solid #cfcfcf; 
-  padding-right: 30px; 
+  border-right: 2px solid var(--fg);
+  flex: 0 0 260px;
+  padding: 15px;
 }
 
 .profile-avatar  {
@@ -635,7 +817,7 @@ form.card input {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border: 1px solid #999;
+  border: 1px solid var(--fg);
   background: #f7f7f7;
   margin-bottom: 15px;
 }
@@ -647,28 +829,19 @@ form.card input {
   margin: 8px 0;
   text-align: center;
   text-decoration: none;
-  color: #fff;
+  color: var(--text);;
   font-weight: bold;
   border-radius: 6px;
-  transition: background 0.2s ease;
+  transition: var(--transition);
+  background-color: var(--bg-blur);
 }
 
-.profile-btn.green {
-  background-color: #2ecc71;
+.profile-btn:hover {
+  transform: scale(1.05);
+  transition: var(--transition);
+  background-color: var(--button-bg);
+  color:var(--text);
 }
-
-.profile-btn.green:hover {
-  background-color: #27ae60;
-}
-
-.profile-btn.red {
-  background-color: #e74c3c;
-}
-
-.profile-btn.red:hover {
-  background-color: #c0392b;
-}
-
 
 .profile-right {
   flex: 1;
@@ -677,7 +850,6 @@ form.card input {
   gap: 15px;
   padding-left: 15px;
 }
-
 
 .profile-box {
   display: grid;
@@ -688,26 +860,27 @@ form.card input {
 }
 
 .label-bold {
-  font-weight: bold;
-  font-size: 18px; 
-  color: #000;
+  font-weight: 800;
+  font-size: 1.2em;
+  color: var(--text);
 }
 
 .label-normal {
-  font-size: 16px; 
-  color: #444;
+  font-weight: 400;
+  font-size: 1em; 
+  color: var(--fg);
 }
 
-
 .profile-bio {
-  border-top: 1px solid #cfcfcf;
+  border-top: 2px solid var(--fg);
   padding-top: 10px;
   text-align: left;
 }
 
 .bio-text {
-  font-size: 16px;
-  color: #333;
+  font-style: italic;
+  font-size: 1.2em;
+  color: var(--text);
   margin-top: 5px;
   white-space: pre-wrap;
   word-break: break-word;
@@ -724,4 +897,95 @@ form.card input {
 }
 .button.blue:hover {
   opacity: 0.9;
+}
+
+.theme-toggle-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--fg);
+}
+
+/* HERO SECTION */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  min-height: 60vh;
+  padding: 60px 0; /* добавим немного верхнего/нижнего пространства */
+}
+
+.hero-bg {
+  background: url("https://images.hdqwalls.com/download/digital-art-anime-cityscape-nx-1920x1080.jpg") center/cover;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  transform: scale(1.1);
+}
+
+.hero-content {
+  text-align: center;
+  animation: fadeInUp 1.2s ease both;
+}
+
+.hero-content h1 {
+  font-size: 4em; /* увеличили текст */
+  font-weight: 900;
+  margin-bottom: 15px;
+  text-shadow: 0 6px 15px rgba(0,0,0,0.7);
+}
+
+.hero-content p {
+  font-size: 1.8em; /* чуть больше */
+  opacity: 0.95;
+}
+
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap; /* можно заменить на nowrap + overflow-x: auto, если хочешь горизонтальный скролл */
+  padding: 50px 0;
+}
+
+.feature-card {
+  background: rgba(108, 52, 163, 0.95); /* насыщенный фиолетовый, почти непрозрачный */
+  border-radius: 24px;
+  padding: 50px 40px; /* больше внутреннего пространства */
+  width: 460px; /* немного уменьшили, чтобы помещались в ряд */
+  height: 420px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  color: #fff;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.feature-card h3 {
+  font-size: 2em; /* крупнее заголовок */
+  margin-bottom: 15px;
+}
+
+.feature-card p {
+  font-size: 1.3em; /* текст побольше */
+}
+
+.feature-card:hover {
+  transform: translateY(-15px) scale(1.08);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.4);
+  background: rgba(138, 43, 226, 0.98); /* ярче на hover */
 }

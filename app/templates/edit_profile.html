@@ -5,56 +5,58 @@
   {% if not editable %}
     <p class="error" style="color:#c0392b;">У вас нет прав для редактирования этого профиля.</p>
     <div style="margin-top:12px;">
-      <a href="/user/{{ user.id }}" class="button secondary">Вернуться в профиль</a>
+      <a href="/user/{{ user.id }}" class="button roboto-font secondary">Вернуться в профиль</a>
     </div>
   {% else %}
     {% if error %}
       <p class="error">{{ error }}</p>
     {% endif %}
-    <form class="card" method="post" action="/user/{{ user.id }}/edit" enctype="multipart/form-data">
-      <div style="flex:0 0 180px;text-align:center;">
-        {% if user.avatar %}
-          <img id="avatarPreview" src="data:image/jpeg;base64,{{ user.avatar }}" alt="Avatar" style="width:160px;height:160px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
-        {% else %}
-          <img id="avatarPreview" src="{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Avatar" style="width:160px;height:160px;object-fit:cover;border-radius:8px;border:1px solid #ddd;background:#fff;padding:8px;">
-        {% endif %}
-        <div style="margin-top:10px;">
-          <label for="avatarFile" class="button">Загрузить</label>
-          <input id="avatarFile" type="file" accept="image/*" style="display:none;">
+    <form class="profile-container" method="post" action="/user/{{ user.id }}/edit" enctype="multipart/form-data">
+      <div class="profile-content">
+        <div style="flex:0 0 180px;text-align:center;">
+          {% if user.avatar %}
+            <img id="avatarPreview" src="data:image/jpeg;base64,{{ user.avatar }}" alt="Avatar" style="width:160px;height:160px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
+          {% else %}
+            <img id="avatarPreview" src="{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}" alt="Avatar" style="width:160px;height:160px;object-fit:cover;border-radius:8px;border:1px solid #ddd;background:#fff;padding:8px;">
+          {% endif %}
+          <div style="margin-top:10px;">
+            <label for="avatarFile" class="button roboto-font">Загрузить</label>
+            <input id="avatarFile" type="file" accept="image/*" style="display:none;">
+          </div>
+          <div style="margin-top:8px;">
+            <button id="removeAvatarBtn" class="button roboto-font" type="button">Удалить</button>
+          </div>
         </div>
-        <div style="margin-top:8px;">
-          <button id="removeAvatarBtn" type="button">Удалить</button>
+
+        <!-- скрытое поле, куда JS запишет base64 -->
+        <input type="hidden" id="avatar_b64" name="avatar_b64" value="">
+
+        <label for="nickname">Никнейм / Имя</label>
+        <input id="nickname" name="nickname" value="{{ user.nickname }}" type="text" required>
+
+        <label for="email">E-mail</label>
+        <input id="email" name="email" value="{{ user.email }}" type="email" required>
+
+        <label for="password">Новый пароль (оставьте пустым, если не менять)</label>
+        <input id="password" name="password" type="password" placeholder="Новый пароль">
+
+        <label for="password_confirm">Подтверждение пароля</label>
+        <input id="password_confirm" name="password_confirm" type="password" placeholder="Подтвердите пароль">
+
+        <label for="birthday">Дата рождения</label>
+        <input id="birthday" name="birthday" type="date" value="{{ user.birthday or '' }}">
+
+        <label for="phone">Номер телефона</label>
+        <input id="phone" name="phone" type="text" value="{{ user.phone or '' }}">
+
+        <label for="bio">О себе</label>
+        <textarea id="bio" name="bio" rows="4">{{ user.bio or '' }}</textarea>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+          <button class="button roboto-font secondary" type="button" onclick="window.location='/user/{{ user.id }}'">Отмена</button>
+          <a class="button blue" href="/user/{{ user.id }}/2fa" style="display:flex;align-items:center;justify-content:center;">Настроить 2FA</a>
+          <button class="button roboto-font" type="submit">Сохранить</button>
         </div>
-      </div>
-
-      <!-- скрытое поле, куда JS запишет base64 -->
-      <input type="hidden" id="avatar_b64" name="avatar_b64" value="">
-
-      <label for="nickname">Никнейм / Имя</label>
-      <input id="nickname" name="nickname" value="{{ user.nickname }}" type="text" required>
-
-      <label for="email">E-mail</label>
-      <input id="email" name="email" value="{{ user.email }}" type="email" required>
-
-      <label for="password">Новый пароль (оставьте пустым, если не менять)</label>
-      <input id="password" name="password" type="password" placeholder="Новый пароль">
-
-      <label for="password_confirm">Подтверждение пароля</label>
-      <input id="password_confirm" name="password_confirm" type="password" placeholder="Подтвердите пароль">
-
-      <label for="birthday">Дата рождения</label>
-      <input id="birthday" name="birthday" type="date" value="{{ user.birthday or '' }}">
-
-      <label for="phone">Номер телефона</label>
-      <input id="phone" name="phone" type="text" value="{{ user.phone or '' }}">
-
-      <label for="bio">О себе</label>
-      <textarea id="bio" name="bio" rows="4">{{ user.bio or '' }}</textarea>
-
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
-        <button class="button secondary" type="button" onclick="window.location='/user/{{ user.id }}'">Отмена</button>
-        <a href="/user/{{ user.id }}/2fa" class="button blue" style="display:flex;align-items:center;justify-content:center;">Настроить 2FA</a>
-        <button class="button" type="submit">Сохранить</button>
       </div>
     </form>
   {% endif %}

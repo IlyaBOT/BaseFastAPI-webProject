@@ -1,6 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Добро пожаловать!</h2>
-<p>Это современный демо веб-проект на FastAPI. Зарегистрируйтесь или войдите, чтобы начать.</p>
+<section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+          <h1>Добро пожаловать в IB-WorkShop</h1>
+          <p>Создавай. Исследуй. Вдохновляйся.</p>
+        </div>
+</section>
+<section class="features">
+        <div class="feature-card">
+          <h3>🔥 Быстрый FastAPI</h3>
+          <p>Мощь Python в вебе без лишних сложностей.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🎨 Стиль и UX</h3>
+          <p>Современный интерфейс с анимациями и темами.</p>
+        </div>
+        <div class="feature-card">
+          <h3>⚙️ Гибкость</h3>
+          <p>Подключай базы данных, API и микросервисы.</p>
+        </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  gsap.to(".hero-bg", {
+    scale: 1,
+    y: 30,
+    scrollTrigger: {
+      trigger: ".hero-section",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    }
+  });
 
+  ScrollReveal().reveal('.hero-content h1', { delay: 300, origin: 'bottom', distance: '40px', duration: 800 });
+  ScrollReveal().reveal('.hero-content p', { delay: 600, origin: 'bottom', distance: '40px', duration: 800 });
+  ScrollReveal().reveal('.feature-card', { interval: 150, origin: 'bottom', distance: '40px', duration: 800 });
+</script>
 {% endblock %}

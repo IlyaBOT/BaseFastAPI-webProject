@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="profile-container">
-  <h1 class="profile-welcome">Добро пожаловать, {{ user.nickname }}!</h1>
-  <div class="profile-layout">
+  <div class="profile-content">
+    <h1 class="profile-welcome roboto-font">Добро пожаловать, {{ user.nickname }}!</h1>
+    <div class="profile-layout">
     <!-- Левая часть -->
     <div class="profile-left">
       <!-- app/templates/profile.html -->
@@ -15,33 +16,30 @@
           <img src="{{ request.url_for('resources', path='img/base_avatar.svg') }}" alt="Фото профиля">
         </div>
       {% endif %}
-
       {% if editable %}
-      <a href="/user/{{ user.id }}/edit" class="profile-btn green">Редактировать профиль</a>
-      <a href="/logout" class="profile-btn red">Выйти из аккаунта</a> 
-    
+      <a href="/user/{{ user.id }}/edit" class="profile-btn roboto-font green">Редактировать профиль</a>
+      <a href="/logout" class="profile-btn roboto-font red">Выйти из аккаунта</a>
       {% endif %}
     </div>
     <!-- Правая часть -->
     <div class="profile-right">
       <div class="profile-box">
-        <p class="label-bold">User ID:</p>
-        <p class="label-normal">{{ user.id }}</p>
+        <p class="label-bold roboto-font">User ID:</p>
+        <p class="label-normal roboto-font">{{ user.id }}</p>
 
-        <p class="label-bold">Email:</p>
-        <p class="label-normal">{{ user.email or "—" }}</p>
+        <p class="label-bold roboto-font">Email:</p>
+        <p class="label-normal roboto-font">{{ user.email or "—" }}</p>
 
-        <p class="label-bold">Дата Рождения:</p>
-        <p class="label-normal">{{ user.birthday or "—" }}</p>
+        <p class="label-bold roboto-font">Дата Рождения:</p>
+        <p class="label-normal roboto-font">{{ user.birthday or "—" }}</p>
 
-        <p class="label-bold">Номер телефона:</p>
-        <p class="label-normal">{{ user.phone or "—" }}</p>
+        <p class="label-bold roboto-font">Номер телефона:</p>
+        <p class="label-normal roboto-font">{{ user.phone or "—" }}</p>
       </div>
 
       <div class="profile-bio">
-        <p class="label-bold">О себе:</p>
-        <p class="bio-text">{{ user.bio or "—" }}</p>
+        <p class="label-bold roboto-font">О себе:</p>
+        <p class="bio-text lxgw-wenkai-mono-tc-regular">{{ user.bio or "—" }}</p>
       </div>
-
 
 {% endblock %}

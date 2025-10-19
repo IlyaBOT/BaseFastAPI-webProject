@@ -38,7 +38,10 @@
       </div>
     </header>
 
-    <main class="container">{% block content %}{% endblock %}</main>
+    <main class="container">
+      
+      {% block content %}{% endblock %}
+    </main>
 
     <footer>
       <div class="container roboto-font">
@@ -51,17 +54,10 @@
         const toggleBtn = document.getElementById("theme-toggle-btn");
         const root = document.documentElement;
 
-        // При загрузке — установить тему из localStorage или системной
         const saved = localStorage.getItem("theme");
-        if (saved) {
-          root.setAttribute("data-theme", saved);
-        } else {
-          // если нет сохранённой темы — можно подставить системную
-          const mq = window.matchMedia("(prefers-color-scheme: dark)");
-          if (mq.matches) {
-            root.setAttribute("data-theme", "dark");
-          }
-        }
+        if (saved) root.setAttribute("data-theme", saved);
+        else if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+          root.setAttribute("data-theme", "dark");
 
         toggleBtn.addEventListener("click", () => {
           const current = root.getAttribute("data-theme");
@@ -70,6 +66,17 @@
           localStorage.setItem("theme", next);
         });
       })();
+
+      window.addEventListener("beforeunload", () => {
+        document.body.classList.add("fade-out");
+      });
     </script>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    {% block scripts %}{% endblock %}
+
   </body>
 </html>

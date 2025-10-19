@@ -160,8 +160,12 @@ body {
   position: relative;
   z-index: 0;
   overflow-x: hidden;
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
-
+body.fade-out {
+  opacity: 0;
+}
 body::before {
   content: "";
   position: fixed;
@@ -893,4 +897,64 @@ form.card input {
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--fg);
+}
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.hero-bg {
+  background: url("https://images.hdqwalls.com/download/digital-art-anime-cityscape-nx-1920x1080.jpg") center/cover;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  transform: scale(1.1);
+}
+
+.hero-content {
+  text-align: center;
+  animation: fadeInUp 1.2s ease both;
+}
+
+.hero-content h1 {
+  font-size: 3em;
+  font-weight: 900;
+  margin-bottom: 10px;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+
+.hero-content p {
+  font-size: 1.5em;
+  opacity: 0.9;
+}
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding: 60px 0;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  width: 280px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }

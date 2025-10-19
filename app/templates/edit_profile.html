@@ -54,6 +54,7 @@
 
         <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
           <button class="button roboto-font secondary" type="button" onclick="window.location='/user/{{ user.id }}'">Отмена</button>
+          <a class="button blue" href="/user/{{ user.id }}/2fa" style="display:flex;align-items:center;justify-content:center;">Настроить 2FA</a>
           <button class="button roboto-font" type="submit">Сохранить</button>
         </div>
       </div>
@@ -130,4 +131,6 @@
     preview.src = "{{ request.url_for('static', path='../resources/img/base_avatar.svg') }}";
   });
 </script>
+
+
 {% endblock %}

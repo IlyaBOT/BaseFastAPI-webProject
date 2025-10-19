@@ -899,6 +899,7 @@ form.card input {
   color: var(--fg);
 }
 
+/* HERO SECTION */
 .hero-section {
   position: relative;
   width: 100%;
@@ -909,6 +910,7 @@ form.card input {
   justify-content: center;
   color: #fff;
   min-height: 60vh;
+  padding: 60px 0; /* добавим немного верхнего/нижнего пространства */
 }
 
 .hero-bg {
@@ -926,36 +928,52 @@ form.card input {
 }
 
 .hero-content h1 {
-  font-size: 3em;
+  font-size: 4em; /* увеличили текст */
   font-weight: 900;
-  margin-bottom: 10px;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  margin-bottom: 15px;
+  text-shadow: 0 6px 15px rgba(0,0,0,0.7);
 }
 
 .hero-content p {
-  font-size: 1.5em;
-  opacity: 0.9;
+  font-size: 1.8em; /* чуть больше */
+  opacity: 0.95;
 }
+
 .features {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
-  padding: 40px 0;
+  gap: 40px;
+  flex-wrap: wrap; /* можно заменить на nowrap + overflow-x: auto, если хочешь горизонтальный скролл */
+  padding: 50px 0;
 }
 
 .feature-card {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 30px;
-  width: 280px;
+  background: rgba(108, 52, 163, 0.95); /* насыщенный фиолетовый, почти непрозрачный */
+  border-radius: 24px;
+  padding: 50px 40px; /* больше внутреннего пространства */
+  width: 460px; /* немного уменьшили, чтобы помещались в ряд */
+  height: 420px;
   text-align: center;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  color: #fff;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.feature-card h3 {
+  font-size: 2em; /* крупнее заголовок */
+  margin-bottom: 15px;
+}
+
+.feature-card p {
+  font-size: 1.3em; /* текст побольше */
 }
 
 .feature-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-15px) scale(1.08);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.4);
+  background: rgba(138, 43, 226, 0.98); /* ярче на hover */
 }

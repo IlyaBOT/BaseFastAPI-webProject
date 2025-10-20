@@ -1,89 +1,78 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="max-width:720px;margin:30px auto;font-family:Inter,Segoe UI,Arial;">
-  <h1 style="margin-bottom:8px;">Настройка двухфакторной аутентификации (2FA)</h1>
+<div class="cont2fa">
+  <h1>Настройка двухфакторной аутентификации (2FA)</h1>
 
   {% if checking %}
     <!-- Режим проверки при логине -->
     <p>Введите код из приложения (Google Authenticator / Authy) для завершения входа.</p>
     {% if error %}
-      <p style="color:#c0392b;font-weight:600;">{{ error }}</p>
+      <p class="error">{{ error }}</p>
     {% endif %}
-    <form method="post" action="/2fa_check" style="margin-top:12px;">
+    <form method="post" action="/2fa_check">
       <label for="code">Код:</label>
-      <input id="code" name="code" type="text" pattern="\d{6}" required autofocus
-             style="padding:8px;width:220px;margin:8px 0;" placeholder="6 цифр">
-      <br>
-      <button type="submit" class="button">Продолжить</button>
-      <a href="/login" style="margin-left:12px;color:#666;text-decoration:none;">Отмена</a>
+      <input id="code" name="code" type="text" pattern="\d{6}" required autofocus placeholder="6 цифр">
+      <div class="form-actions">
+        <button type="submit" class="button">Продолжить</button>
+        <a href="/login" class="cancel-link">Отмена</a>
+      </div>
     </form>
   {% else %}
     <!-- Настройка 2FA -->
-    <div style="display:flex;gap:24px;align-items:flex-start;">
-      <div style="flex:1;min-width:280px;">
-        <p style="margin:0 0 8px 0;"><strong>Текущий статус:</strong></p>
+    <div class="status-section">
+      <div class="status-text">
+        <p><strong>Текущий статус:</strong></p>
         {% if user.is_2fa_enabled %}
-          <p style="color:green;font-weight:600;margin-top:0;">Включена ✅</p>
+          <p class="enabled">Включена ✅</p>
         {% else %}
-          <p style="color:#555;font-weight:600;margin-top:0;">Выключена — рекомендуется включить для безопасности</p>
+          <p class="disabled">Выключена — рекомендуется включить для безопасности</p>
         {% endif %}
       </div>
 
-      <div style="min-width:220px;">
+      <div class="status-action">
         {% if user.is_2fa_enabled %}
           <form method="post" action="/user/{{ user.id }}/2fa_disable">
-            <button type="submit" class="button" style="background:#e74c3c;border:none;padding:10px 14px;color:#fff;border-radius:6px;">Отключить 2FA</button>
+            <button type="submit" class="button red">Отключить 2FA</button>
           </form>
         {% else %}
-          <button id="showSetupBtn" type="button" class="button" style="background:#2ecc71;border:none;padding:10px 14px;color:#fff;border-radius:6px;">
-            Включить 2FA
-          </button>
+          <button id="showSetupBtn" type="button" class="button green">Включить 2FA</button>
         {% endif %}
       </div>
     </div>
 
     {% if not user.is_2fa_enabled %}
-    <div id="setupBlock" style="margin-top:22px;display:none;border:1px solid #eee;padding:18px;border-radius:8px;background:#fafafa;">
-      <h3 style="margin-top:0;">Настройка 2FA</h3>
-      <p style="margin:6px 0 12px 0;">
-        Отсканируйте QR-код в приложении Google Authenticator (или любом другом TOTP-клиенте).
-        Если не получается — вручную введите ключ.
-      </p>
+    <div id="setupBlock" class="setup-block">
+      <h3>Настройка 2FA</h3>
+      <p>Отсканируйте QR-код в приложении Google Authenticator (или любом другом TOTP-клиенте). Если не получается — вручную введите ключ.</p>
 
-      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;">
-        <div style="flex:0 0 160px;">
+      <div class="setup-content">
+        <div class="qr-block">
           {% if qr %}
-            <img src="data:image/png;base64,{{ qr }}" alt="QR code" style="width:160px;height:160px;border:1px solid #ddd;padding:6px;background:#fff;">
+            <img src="data:image/png;base64,{{ qr }}" alt="QR code">
           {% else %}
-            <div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px dashed #ccc;color:#999;">
-              QR отсутствует
-            </div>
+            <div class="qr-placeholder">QR отсутствует</div>
           {% endif %}
         </div>
 
-        <div style="flex:1;min-width:200px;">
-          <p style="margin:0 0 6px 0;"><strong>Секретный ключ</strong></p>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <code style="padding:6px 8px;background:#fff;border:1px solid #ddd;border-radius:6px;">{{ secret }}</code>
-            <button id="copySecretBtn" type="button" style="padding:6px 10px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">Копировать</button>
+        <div class="secret-block">
+          <p><strong>Секретный ключ</strong></p>
+          <div class="copy-wrapper">
+            <code>{{ secret }}</code>
+            <button id="copySecretBtn" type="button">Копировать</button>
           </div>
 
-          <p style="margin:12px 0 6px 0;font-size:0.95rem;color:#555;">
-            После добавления аккаунта в приложение введите текущий одноразовый код ниже:
-          </p>
-
+          <p class="info-text">После добавления аккаунта в приложение введите текущий одноразовый код ниже:</p>
           {% if error %}
-            <p style="color:#c0392b;font-weight:600;">{{ error }}</p>
+            <p class="error">{{ error }}</p>
           {% endif %}
 
-          <!-- Вот правильная форма для включения 2FA -->
-          <form method="post" action="/user/{{ user.id }}/2fa_enable" style="margin-top:8px;">
+          <form method="post" action="/user/{{ user.id }}/2fa_enable">
             <label for="code_enable">Код из приложения:</label>
-            <input id="code_enable" name="code" type="text" pattern="\d{6}" required
-                   style="padding:8px;width:220px;margin:8px 0;" placeholder="6 цифр" autofocus>
-            <br>
-            <button type="submit" class="button" style="background:#2ecc71;border:none;padding:10px 14px;color:#fff;border-radius:6px;">Подтвердить и включить 2FA</button>
-            <a href="/user/{{ user.id }}" style="margin-left:12px;color:#666;text-decoration:none;">Отмена</a>
+            <input id="code_enable" name="code" type="text" pattern="\d{6}" required placeholder="6 цифр" autofocus>
+            <div class="form-actions">
+              <button type="submit" class="button green">Подтвердить и включить 2FA</button>
+              <a href="/user/{{ user.id }}" class="cancel-link">Отмена</a>
+            </div>
           </form>
         </div>
       </div>

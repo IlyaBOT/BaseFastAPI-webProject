@@ -989,3 +989,217 @@ form.card input {
   box-shadow: 0 18px 50px rgba(0,0,0,0.4);
   background: rgba(138, 43, 226, 0.98); /* ярче на hover */
 }
+
+.twofa-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.twofa-card {
+  background: var(--bg-blur);
+  backdrop-filter: blur(12px) saturate(120%);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 40px 50px;
+  max-width: 850px;
+  width: 100%;
+  transition: var(--transition);
+  animation: fadeInUp 0.6s ease both;
+}
+
+.twofa-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.twofa-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+  margin-top: 18px;
+}
+
+.twofa-qr img {
+  width: 180px;
+  height: 180px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  background: #fff;
+  padding: 8px;
+}
+
+.qr-placeholder {
+  width: 180px;
+  height: 180px;
+  border: 2px dashed #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+}
+
+.twofa-secret .secret-box {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.twofa-secret code {
+  background: rgba(255,255,255,0.8);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.twofa-setup {
+  margin-top: 25px;
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.hidden {
+  display: none;
+}
+
+.cont2fa {
+  max-width: 720px;
+  margin: 30px auto;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #451766, #330c7c);
+  padding: 30px;
+  border-radius: 16px;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.cont2fa h1 {
+  margin-bottom: 20px;
+  font-size: 2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.status-section {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.status-text p {
+  margin: 0;
+}
+
+.status-text .enabled {
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+.status-text .disabled {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.status-action .button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+}
+
+.button.green { background: #2ecc71; color: #fff; }
+.button.red { background: #e74c3c; color: #fff; }
+
+.setup-block {
+  display: none;
+  margin-top: 20px;
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.setup-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.qr-block img, .qr-placeholder {
+  width: 160px;
+  height: 160px;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #555;
+  border: 2px dashed #ddd;
+}
+
+.secret-block {
+  flex: 1;
+  min-width: 200px;
+}
+
+.copy-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.copy-wrapper code {
+  padding: 6px 8px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 6px;
+}
+
+.copy-wrapper button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  color: #fff;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  margin-top: 4px;
+}
+
+.form-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.cancel-link {
+  color: #eee;
+  text-decoration: none;
+}
+
+.error {
+  color: #ff6b6b;
+  font-weight: 600;
+}

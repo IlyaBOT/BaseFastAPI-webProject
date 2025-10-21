@@ -1,1 +1,79 @@
 /* Здесь будет код стилей для мобильных устройств */
+
+/* iPhone 4 */
+@media (max-width: 481px) { 
+    p{
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    h1{
+        font-size: 2em;
+        font-weight: 600;
+        font-weight: bold;
+        unicode-bidi: isolate;
+    }
+
+    h2{
+        font-size: 1.5em;
+        font-weight: 500;
+        font-weight: bold;
+        unicode-bidi: isolate;
+    }
+
+    h3{
+        font-size: 1.17em;
+        font-weight: 450;
+        font-weight: bold;
+        unicode-bidi: isolate;
+    }
+
+    h4{
+        font-size: 1em;
+        font-weight: 400;
+        font-weight: bold;
+       unicode-bidi: isolate;
+    }
+
+    h5{
+        font-size: 0.83em;
+        font-weight: 400;
+        font-weight: bold;
+        unicode-bidi: isolate;
+    }
+
+    h6{
+        font-size: 0.67em;
+        font-weight: 300;
+        font-weight: bold;
+        unicode-bidi: isolate;
+    }
+
+    body{
+        font-family: "Oswald", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 350;
+        font-size: 16px;
+        font-style: normal;
+    }
+
+    .logo a {
+        font-weight: 700;
+        font-size: 1rem;
+    }
+}
+
+/* iPhone 5S/SE */
+@media (max-width: 568) { 
+    
+}
+
+/* iPhone X */
+@media (max-width: 812px) { 
+    
+}
+
+/* iPad Mini */
+@media (max-width: 1024px) { 
+    
+}

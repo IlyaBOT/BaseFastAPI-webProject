@@ -1203,3 +1203,65 @@ input[type="text"] {
   color: #ff6b6b;
   font-weight: 600;
 }
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 40px 20px;
+}
+
+.error-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  padding: 60px 80px;
+  text-align: center;
+  color: var(--text);
+  max-width: 600px;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.error-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.2);
+}
+
+.error-code {
+  font-size: 5rem;
+  font-weight: 800;
+  color: var(--text);
+  opacity: 0.85;
+  margin: 0;
+  letter-spacing: -2px;
+}
+
+.error-message {
+  margin-top: 10px;
+  font-size: 1.4rem;
+  color: var(--muted);
+}
+
+.error-back {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 26px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  background: rgba(0, 122, 255, 0.2);
+  color: var(--text);
+  transition: background 0.3s ease, transform 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.error-back:hover {
+  background: rgba(0, 122, 255, 0.35);
+  transform: translateY(-1px);
+}
+

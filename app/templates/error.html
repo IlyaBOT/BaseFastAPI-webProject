@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="error-container" style="max-width:700px;margin:40px auto;text-align:center;">
-  <h2>Ошибка {{ code }}</h2>
-  <p style="margin-top:10px;">{{ message }}</p>
-  <div style="margin-top:20px;">
-    <a href="/" class="button">На главную</a>
+<div class="error-container">
+  <div class="error-card">
+    <h1 class="error-code">{{ code }}</h1>
+    <p class="error-message">{{ message }}</p>
+    <a href="/" class="error-back">⟵ На главную</a>
   </div>
 </div>
 {% endblock %}

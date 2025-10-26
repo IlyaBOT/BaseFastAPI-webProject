@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8">
@@ -15,27 +15,29 @@
         <nav>
           <ul>
             {% if not user %}
-                <li><a href="/login">Вход</a></li>
+                <li><a href="/login">Р’С…РѕРґ</a></li>
             {% endif %}
             {% if not user %}
-                <li><a href="/register">Регистрация</a></li>
+                <li><a href="/register">Р РµРіРёСЃС‚СЂР°С†РёСЏ</a></li>
             {% endif %}
             {% if user %}
                 <li class="nav-user">
                 <a href="/user/{{ user.id }}">
                     {% if user.avatar %}
-                        <img class="nav-avatar-small" src="data:image/png;base64,{{ user.avatar }}" alt="Фото профиля" width="42" height="42">
+                        <img class="nav-avatar-small" src="data:image/png;base64,{{ user.avatar }}" alt="Р¤РѕС‚Рѕ РїСЂРѕС„РёР»СЏ" width="42" height="42">
                     {% else %}
-                        <img class="nav-avatar-small" src="{{ request.url_for('resources', path='img/base_avatar.svg') }}" alt="Фото профиля" width="42" height="42">
+                        <img class="nav-avatar-small" src="{{ request.url_for('resources', path='img/base_avatar.svg') }}" alt="Р¤РѕС‚Рѕ РїСЂРѕС„РёР»СЏ" width="42" height="42">
                     {% endif %}
                     <span class="nav-username">{{ user.nickname }}</span>
                 </a>
                 </li>
             {% endif %}
             {% if user and user.is_admin %}
-                <li><a href="/admin">Админка</a></li>
+                <li><a href="/admin">РђРґРјРёРЅРєР°</a></li>
             {% endif %}
-            <button id="theme-toggle-btn" class="theme-toggle-btn">🌓</button>
+            <li class="nav-theme">
+                <button id="theme-toggle-btn" class="theme-toggle-btn" type="button">�??"</button>
+            </li>
           </ul>
         </nav>
       </div>
@@ -48,7 +50,7 @@
 
     <footer>
       <div class="container roboto-font">
-        <p>&copy; IB-WorkShop. 2025. Все права защищены.</p>
+        <p>&copy; IB-WorkShop. 2025. Р’СЃРµ РїСЂР°РІР° Р·Р°С‰РёС‰РµРЅС‹.</p>
       </div>
     </footer>
 
@@ -83,3 +85,4 @@
 
   </body>
 </html>
+

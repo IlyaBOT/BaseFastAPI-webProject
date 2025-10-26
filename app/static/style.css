@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@400;700&display=swap');
 
 .roboto-font{
@@ -109,7 +109,7 @@ h6{
 }
 
 [data-theme="dark"] {
-  /* Переопределения для тёмной темы */
+  /* РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёСЏ РґР»СЏ С‚С‘РјРЅРѕР№ С‚РµРјС‹ */
   --bg-color: #fff;
   --bg-blur: rgba(0, 0, 0, 0.32);
   --fg: #eee;
@@ -127,10 +127,10 @@ h6{
 
   --muted: #a0a0a0;
   --accent: #3399ff;
-  --accent-darken: #80bdff;   /* В тёмной теме accent-darken и */
-  --accent-lighten: #003166; /* accent-lighten поменяны местами */
+  --accent-darken: #80bdff;   /* Р’ С‚С‘РјРЅРѕР№ С‚РµРјРµ accent-darken Рё */
+  --accent-lighten: #003166; /* accent-lighten РїРѕРјРµРЅСЏРЅС‹ РјРµСЃС‚Р°РјРё */
 
-  /* Можно менять фон — либо другая картинка, либо тёмный фон */
+  /* РњРѕР¶РЅРѕ РјРµРЅСЏС‚СЊ С„РѕРЅ вЂ” Р»РёР±Рѕ РґСЂСѓРіР°СЏ РєР°СЂС‚РёРЅРєР°, Р»РёР±Рѕ С‚С‘РјРЅС‹Р№ С„РѕРЅ */
   --bg: url("https://images.hdqwalls.com/wallpapers/minimal-waterfall-in-mountains-scenery-beautiful-5k-4a.jpg");
 }
 
@@ -175,7 +175,7 @@ body::before {
   height: 100%;
   background: var(--bg) center center no-repeat;
   background-size: cover;
-  z-index: -1;  /* за всем контентом */
+  z-index: -1;  /* Р·Р° РІСЃРµРј РєРѕРЅС‚РµРЅС‚РѕРј */
   /* transform: scale(1.05); */
 }
 
@@ -198,17 +198,21 @@ header {
 }
 
 header .container {
+  width: 100%;
+  max-width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: flex-start;
+  gap: clamp(12px, 2.4vw, 32px);
+  flex-wrap: nowrap;
+  padding: 0 clamp(12px, 4vw, 48px);
 }
 
 .logo a {
   text-decoration: none;
   color: var(--text);
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 2.2vw, 1.75rem);
   letter-spacing: -0.2px;
   transition: var(--transition);
 }
@@ -217,25 +221,48 @@ header .container {
   color: var(--accent-darken);
 }
 
+nav {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+  margin-left: auto;
+}
+
 nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: clamp(8px, 1.5vw, 20px);
+  flex-wrap: nowrap;
+}
+
+nav ul li {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 nav a {
   text-decoration: none;
   color: var(--text);
-  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1vw, 12px);
+  padding: clamp(4px, 0.8vw, 8px) clamp(10px, 1.6vw, 18px);
   border-radius: 10px;
   transition: var(--transition);
+  font-size: clamp(0.8rem, 1vw, 1rem);
+  white-space: nowrap;
 
   font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 500;
+  font-weight: 600;
   font-style: normal;
   font-variation-settings:
     "wdth" 100;
@@ -246,27 +273,57 @@ nav a:hover {
   /* background: rgba(0, 122, 255, 0.08); */
 }
 
+.nav-theme {
+  flex: 0 0 auto;
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(4px, 0.8vw, 8px) clamp(10px, 1.6vw, 16px);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.35);
+  color: var(--text);
+  cursor: pointer;
+  font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+  transition: var(--transition-btn);
+  min-width: clamp(40px, 3.2vw, 52px);
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(0, 122, 255, 0.12);
+  color: var(--accent-darken);
+}
+
 .nav-user {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: clamp(6px, 1.4vw, 14px);
+}
+
+.nav-user > a {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(6px, 1.2vw, 12px);
 }
 
 .nav-avatar-small {
-  width: 42px;
-  height: 42px;
+  width: clamp(30px, 2.8vw, 42px);
+  height: clamp(30px, 2.8vw, 42px);
   background: var(--bg-color);
   border-radius: 50%;
   object-fit: cover;
   vertical-align: middle;
-  /* можно бордюр тоненький, если нужен */
+  /* РјРѕР¶РЅРѕ Р±РѕСЂРґСЋСЂ С‚РѕРЅРµРЅСЊРєРёР№, РµСЃР»Рё РЅСѓР¶РµРЅ */
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .nav-username {
   padding: 0px 0px 0px 8px;
   font-weight: 600;
-  font-size: 1.25em;
+  font-size: clamp(0.8rem, 1.1vw, 1.1rem);
   line-height: 1;
   vertical-align: middle;
 }
@@ -422,8 +479,17 @@ footer {
 
 
 @media (max-width: 900px) {
-  header .container { flex-direction: column; align-items: flex-start; gap: 8px; }
-  nav ul { flex-wrap: wrap; gap: 8px; }
+  header .container {
+    gap: clamp(8px, 3vw, 20px);
+    padding: 0 clamp(12px, 6vw, 32px);
+  }
+  nav ul {
+    gap: clamp(6px, 2vw, 12px);
+  }
+  nav a,
+  .theme-toggle-btn {
+    padding: clamp(4px, 1.8vw, 10px) clamp(8px, 4vw, 14px);
+  }
   .hero { padding: 0px 24px 24px; }
 }
 .register-container {
@@ -745,7 +811,7 @@ form.card input {
   margin: 60px auto;
   padding: 0px 24px 24px;
 
-  background: var(--bg-blur); /* лёгкий светлый фон */
+  background: var(--bg-blur); /* Р»С‘РіРєРёР№ СЃРІРµС‚Р»С‹Р№ С„РѕРЅ */
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0,0,0,0.1);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
@@ -753,7 +819,7 @@ form.card input {
   -webkit-backdrop-filter: blur(12px) saturate(120%);
 }
 
-/* Блики внутри */
+/* Р‘Р»РёРєРё РІРЅСѓС‚СЂРё */
 .liquidGlass-shine {
   position: absolute;
   inset: 0;
@@ -763,16 +829,16 @@ form.card input {
     inset -1px -1px 1px 1px rgba(255,255,255,0.5);
 }
 
-/* Текст / контент поверх эффектов */
+/* РўРµРєСЃС‚ / РєРѕРЅС‚РµРЅС‚ РїРѕРІРµСЂС… СЌС„С„РµРєС‚РѕРІ */
 .liquidGlass-text {
   position: relative;
   z-index: 3;
-  color: #000; /* или другой цвет текста, учитывая прозрачность */
+  color: #000; /* РёР»Рё РґСЂСѓРіРѕР№ С†РІРµС‚ С‚РµРєСЃС‚Р°, СѓС‡РёС‚С‹РІР°СЏ РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ */
 }
 
-/* Если хочешь: при наведении можно подсветку */
+/* Р•СЃР»Рё С…РѕС‡РµС€СЊ: РїСЂРё РЅР°РІРµРґРµРЅРёРё РјРѕР¶РЅРѕ РїРѕРґСЃРІРµС‚РєСѓ */
 .liquidGlass-wrapper:hover {
-  /* чуть усилить свет или тень */
+  /* С‡СѓС‚СЊ СѓСЃРёР»РёС‚СЊ СЃРІРµС‚ РёР»Рё С‚РµРЅСЊ */
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0,0,0,0.15);
   background: rgba(255, 255, 255, 0.15);
 }
@@ -899,17 +965,7 @@ form.card input {
   opacity: 0.9;
 }
 
-.theme-toggle-btn {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 1000;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--fg);
-}
+
 
 /* HERO SECTION */
 .hero-section {
@@ -922,7 +978,7 @@ form.card input {
   justify-content: center;
   color: #fff;
   min-height: 60vh;
-  padding: 60px 0; /* добавим немного верхнего/нижнего пространства */
+  padding: 60px 0; /* РґРѕР±Р°РІРёРј РЅРµРјРЅРѕРіРѕ РІРµСЂС…РЅРµРіРѕ/РЅРёР¶РЅРµРіРѕ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР° */
 }
 
 .hero-bg {
@@ -940,14 +996,14 @@ form.card input {
 }
 
 .hero-content h1 {
-  font-size: 4em; /* увеличили текст */
+  font-size: 4em; /* СѓРІРµР»РёС‡РёР»Рё С‚РµРєСЃС‚ */
   font-weight: 900;
   margin-bottom: 15px;
   text-shadow: 0 6px 15px rgba(0,0,0,0.7);
 }
 
 .hero-content p {
-  font-size: 1.8em; /* чуть больше */
+  font-size: 1.8em; /* С‡СѓС‚СЊ Р±РѕР»СЊС€Рµ */
   opacity: 0.95;
 }
 
@@ -955,15 +1011,15 @@ form.card input {
   display: flex;
   justify-content: center;
   gap: 40px;
-  flex-wrap: wrap; /* можно заменить на nowrap + overflow-x: auto, если хочешь горизонтальный скролл */
+  flex-wrap: wrap; /* РјРѕР¶РЅРѕ Р·Р°РјРµРЅРёС‚СЊ РЅР° nowrap + overflow-x: auto, РµСЃР»Рё С…РѕС‡РµС€СЊ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅС‹Р№ СЃРєСЂРѕР»Р» */
   padding: 50px 0;
 }
 
 .feature-card {
-  background: rgba(108, 52, 163, 0.95); /* насыщенный фиолетовый, почти непрозрачный */
+  background: rgba(108, 52, 163, 0.95); /* РЅР°СЃС‹С‰РµРЅРЅС‹Р№ С„РёРѕР»РµС‚РѕРІС‹Р№, РїРѕС‡С‚Рё РЅРµРїСЂРѕР·СЂР°С‡РЅС‹Р№ */
   border-radius: 24px;
-  padding: 50px 40px; /* больше внутреннего пространства */
-  width: 460px; /* немного уменьшили, чтобы помещались в ряд */
+  padding: 50px 40px; /* Р±РѕР»СЊС€Рµ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР° */
+  width: 460px; /* РЅРµРјРЅРѕРіРѕ СѓРјРµРЅСЊС€РёР»Рё, С‡С‚РѕР±С‹ РїРѕРјРµС‰Р°Р»РёСЃСЊ РІ СЂСЏРґ */
   height: 420px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -976,18 +1032,18 @@ form.card input {
 }
 
 .feature-card h3 {
-  font-size: 2em; /* крупнее заголовок */
+  font-size: 2em; /* РєСЂСѓРїРЅРµРµ Р·Р°РіРѕР»РѕРІРѕРє */
   margin-bottom: 15px;
 }
 
 .feature-card p {
-  font-size: 1.3em; /* текст побольше */
+  font-size: 1.3em; /* С‚РµРєСЃС‚ РїРѕР±РѕР»СЊС€Рµ */
 }
 
 .feature-card:hover {
   transform: translateY(-15px) scale(1.08);
   box-shadow: 0 18px 50px rgba(0,0,0,0.4);
-  background: rgba(138, 43, 226, 0.98); /* ярче на hover */
+  background: rgba(138, 43, 226, 0.98); /* СЏСЂС‡Рµ РЅР° hover */
 }
 
 .twofa-wrapper {
@@ -1265,7 +1321,7 @@ input[type="text"] {
   transform: translateY(-1px);
 }
 
-/* Поддержка HD-экранов (1280x720, 1366x768 и т.д.) */
+/* РџРѕРґРґРµСЂР¶РєР° HD-СЌРєСЂР°РЅРѕРІ (1280x720, 1366x768 Рё С‚.Рґ.) */
 @media (max-width: 1366px) {
   html, body { font-size: 0.9rem; }
   .container { max-width: 65%; padding: 0 16px; }
@@ -1313,4 +1369,6 @@ input[type="text"] {
   .error-message { font-size: 1.1rem; }
   .error-back { padding: 10px 20px; border-radius: 10px; font-size: 0.9rem; }
 }
+
+
 

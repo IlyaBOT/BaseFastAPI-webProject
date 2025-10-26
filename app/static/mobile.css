@@ -56,9 +56,9 @@
     }
 
     .theme-toggle-btn {
-        top: 16px;
-        right: 16px;
-        font-size: 1rem;
+        font-size: 0.95rem;
+        min-width: 42px;
+        padding: 6px 10px;
     }
 }
 

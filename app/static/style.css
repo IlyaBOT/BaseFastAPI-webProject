@@ -1266,7 +1266,7 @@ input[type="text"] {
 }
 
 /* Поддержка HD-экранов (1280x720, 1366x768 и т.д.) */
-@media (min-width: 1600px) {
+@media (max-width: 1366px) {
   html, body { font-size: 0.9rem; }
   .container { max-width: 65%; padding: 0 16px; }
   header .container { gap: 12px; }

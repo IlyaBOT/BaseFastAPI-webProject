@@ -65,6 +65,30 @@
 <!-- Подключаем библиотеку browser-image-compression через CDN -->
 <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.13/dist/browser-image-compression.js"></script>
 <script>
+  const birthdayInput = document.getElementById('birthday');
+
+  if (birthdayInput) {
+    const unixEpochStart = '1970-01-01';
+    const today = new Date();
+    const todayStr = [
+      today.getFullYear(),
+      String(today.getMonth() + 1).padStart(2, '0'),
+      String(today.getDate()).padStart(2, '0')
+    ].join('-');
+
+    birthdayInput.min = unixEpochStart;
+    birthdayInput.max = todayStr;
+
+    if (birthdayInput.value) {
+      if (birthdayInput.value < unixEpochStart) {
+        birthdayInput.value = unixEpochStart;
+      } else if (birthdayInput.value > todayStr) {
+        birthdayInput.value = todayStr;
+      }
+    }
+  }
+</script>
+<script>
   const avatarFile = document.getElementById('avatarFile');
   const avatarB64Input = document.getElementById('avatar_b64');
   const preview = document.getElementById('avatarPreview');
